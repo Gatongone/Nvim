@@ -126,7 +126,7 @@ local function setup_scheme(theme_name, opts)
         SpellRare                           = { fg = scheme.base0A },
         StatusLine                          = { fg = scheme.base05, bg = scheme.base03 },
         StatusLineNC                        = { fg = scheme.base03 },
-        StatusLineTerm                      = { fg = scheme.base05, bg = scheme.base03 },
+        StatusLineTerm                      = { fg = scheme.base05 },
         StatusLineTermNC                    = { fg = scheme.base03 },
         Terminal                            = { fg = scheme.base05, bg = scheme.base02 },
         VisualNOS                           = { fg = scheme.base03 },
