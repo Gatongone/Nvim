@@ -94,21 +94,13 @@ local dap_breakpoint =
 return
 {
     {
-        "williamboman/mason-lspconfig.nvim",
+        "mason-org/mason-lspconfig.nvim",
         config = function()
-            local caps     = require('cmp_nvim_lsp').default_capabilities()
             local confs    = require("mason-lspconfig")
-            local lsp      = require("lspconfig")
-            local handlers =
-            {
-                function(server)
-                    local config = lsps[server]
-                    if config and not config.capabilities then
-                        config.capabilities = caps
-                    end
-                    lsp[server].setup(config or { on_attach = on_client_attach, capabilities = caps })
-                end
-            }
+
+            for server, config in pairs(lsps) do
+                vim.lsp.config(server, config)
+            end
             require 'nvim-treesitter.configs'.setup(
             {
                 highlight =
@@ -139,12 +131,11 @@ return
                 }
             })
             confs.setup({ ensure_installed = servers })
-            confs.setup_handlers(handlers)
             vim.diagnostic.config { float = { border = "rounded" } }
         end,
         dependencies =
         {
-            "williamboman/mason.nvim",
+            "mason-org/mason.nvim",
             "neovim/nvim-lspconfig",
             "nvimdev/lspsaga.nvim",
             "nvim-treesitter/nvim-treesitter",
