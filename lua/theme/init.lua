@@ -6,7 +6,7 @@ local default_config =
 {
     background_color     = "medium",
     comment_style        = "italic",
-    keyword_style        = "italic",
+    keyword_style        = {"bold","italic"},
     function_style       = "bold",
     string_style         = "nocombine",
     variable_style       = "NONE",
@@ -68,11 +68,11 @@ local function setup_scheme(theme_name, opts)
         Character                           = { fg = scheme.base0A },
         Number                              = { fg = scheme.base09 },
         Float                               = { fg = scheme.base0A },
-        Boolean                             = { fg = scheme.base0E },
+        Boolean                             = { fg = scheme.base09 },
         Identifier                          = { fg = scheme.base08, style = style.variable_style },
         Function                            = { fg = scheme.base0D },
         Statement                           = { fg = scheme.base0E },
-        Conditional                         = { fg = scheme.base0E },
+        Conditional                         = { fg = scheme.base0E, style = style.keyword_style },
         Repeat                              = { fg = scheme.base0E },
         Label                               = { fg = scheme.base07 },
         Operator                            = { fg = scheme.base0C },
@@ -91,7 +91,7 @@ local function setup_scheme(theme_name, opts)
         Special                             = { fg = scheme.base0F },
         SpecialComment                      = { fg = scheme.base03 },
         MoreMsg                             = { fg = scheme.base05 },
-        Error                               = { fg = scheme.base0E, style = "bold" },
+        Error                               = { fg = scheme.base0E, style = {"bold", "strikethrough"} },
         Todo                                = { fg = scheme.base0F, style = "bold" },
         CursorLineNr                        = { fg = scheme.base03, style = "bold" },
         debugPc                             = { bg = scheme.base0E },
@@ -159,7 +159,7 @@ local function setup_scheme(theme_name, opts)
         DapUIWatchesValue                   = { fg = scheme.base05 },
         DapUIWatchesError                   = { fg = scheme.base0E },
         DapUIWatchesFrame                   = { fg = scheme.base0C },
-        DapUIBreakpointsPath                = { fg = scheme.base0B, style = "bold"},
+        DapUIBreakpointsPath                = { fg = scheme.base0B, style = "bold" },
         DapUIBreakpointsInfo                = { fg = scheme.base08 },
         DapUIBreakpointsCurrentLine         = { fg = scheme.base09 },
         DapUIStop                           = { fg = scheme.base0E },
@@ -214,11 +214,11 @@ local function setup_scheme(theme_name, opts)
         NetrwMarkFile                       = { fg = scheme.base0A, style = "bold" },
 
         -- Tree Sitter
-        ["@boolean"]                        = { fg = scheme.base0E },
+        ["@boolean"]                        = { fg = scheme.base09 },
         ["@define"]                         = { fg = scheme.base0E },
         ["@keyword.directive"]              = { fg = scheme.base0E },
         ["@comment"]                        = { fg = scheme.base03, style = style.comment_style },
-        ["@error"]                          = { fg = scheme.base0E },
+        ["@error"]                          = { fg = scheme.base0E, style = {"bold", "strikethrough"}  },
         ["@punctuation.delimiter"]          = { fg = scheme.base05 },
         ["@punctuation.bracket"]            = { fg = scheme.base05 },
         ["@punctuation.special"]            = { fg = scheme.base05 },
@@ -229,13 +229,13 @@ local function setup_scheme(theme_name, opts)
         ["@string"]                         = { fg = scheme.base0B, style = style.string_style },
         ["@character"]                      = { fg = scheme.base0B },
         ["@number"]                         = { fg = scheme.base09 },
-        ["@namespace"]                      = { fg = scheme.base0E },
+        ["@namespace"]                      = { fg = scheme.base0E, style = style.keyword_style },
         ["@module"]                         = { fg = scheme.base08 },
         ["@func.builtin"]                   = { fg = scheme.base0D },
         ["@function"]                       = { fg = scheme.base0D, style = style.function_style },
         ["@function.call"]                  = { fg = scheme.base0D, style = style.function_style },
         ["@function.builtin"]               = { fg = scheme.base0D, style = style.function_style },
-        ["@func.macro"]                     = { fg = scheme.base0E },
+        ["@func.macro"]                     = { fg = scheme.base0E, style = style.keyword_style  },
         ["@parameter"]                      = { fg = scheme.base09, style = "nocombine" },
         ["@variable.parameter"]             = { fg = scheme.base09, style = "nocombine" },
         ["@parameter.reference"]            = { fg = scheme.base03 },
@@ -247,10 +247,10 @@ local function setup_scheme(theme_name, opts)
         ["@variable.member"]                = { fg = scheme.base08 },
         ["@property"]                       = { fg = scheme.base09 },
         ["@constructor"]                    = { fg = scheme.base0D, style = "nocombine" },
-        ["@conditional"]                    = { fg = scheme.base0E },
-        ["@keyword.conditional"]            = { fg = scheme.base0E },
-        ["@repeat"]                         = { fg = scheme.base0E },
-        ["@keyword.repeat"]                 = { fg = scheme.base0E },
+        ["@conditional"]                    = { fg = scheme.base0E, style.keyword_style },
+        ["@keyword.conditional"]            = { fg = scheme.base0E, style = style.keyword_style },
+        ["@repeat"]                         = { fg = scheme.base0E, style = style.keyword_style },
+        ["@keyword.repeat"]                 = { fg = scheme.base0E, style = style.keyword_style },
         ["@label"]                          = { fg = scheme.base09 },
         ["@keyword"]                        = { fg = scheme.base0E, style = style.keyword_style },
         ["@keyword.return"]                 = { fg = scheme.base0E, style = style.keyword_style },
@@ -600,9 +600,9 @@ local function setup_scheme(theme_name, opts)
 
     if style.transparent_bg then
         theme.base = vim.tbl_extend("force", theme.base,
-        {
-            DapUIEndofBuffer = { bg = scheme.base01 },
-        })
+            {
+                DapUIEndofBuffer = { bg = scheme.base01 },
+            })
     end
 
     theme.base = vim.tbl_extend("force", theme.base, style.highlights or {})
