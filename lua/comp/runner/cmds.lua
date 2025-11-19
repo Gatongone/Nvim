@@ -14,5 +14,6 @@ return
     typescript = { cmd = [[ node --trace-warnings "$file" ]] },
     lua        = { cmd = [[ luajit "$file" ]] },
     markdown   = { cmd = [[ glow "$file" ]] },
-    zig        = { cmd = [[ zig run "$file" ]] }
+    zig        = { cmd = [[ zig run "$file" ]] },
+    ocaml      = { cmd = [[ dune build; dune exec "$exename" || ocaml "$file"]]}
 }
