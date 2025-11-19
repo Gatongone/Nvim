@@ -16,11 +16,48 @@
 --- @field os string Current operation system
 --- @field get_line_ending function Get current file line ending type
 --- @field get_proj_root function Get project root directory
-
 nvim.env = { }
 
 local shell = vim.o.shell:lower()
 shell = vim.fn.fnamemodify(shell, ':t'):gsub('%.exe$', '')
+
+local proj_characteristics =
+{
+    cs         = {"*.csproj"},
+    ocaml      = {"*.opam", "dune-project", "dune-workspace"},
+    rust       = {"Cargo.toml"},
+    go         = {"go.mod"},
+    javascript = {"package.json", "yarn.lock", "package-lock.json"},
+    haskell    = {"*.cabal", "stack.yaml", "package.yaml"},
+    python     = {"pyproject.toml", "setup.py", "requirements.txt", "Pipfile"},
+    ruby       = {"Gemfile"},
+    php        = {"composer.json"}
+}
+
+local get_proj_root_from_filetype = function()
+    local markers = proj_characteristics[vim.bo.filetype]
+
+    if markers then
+        local path = vim.fn.expand('%:p:h') or vim.fn.getcwd()
+        local max_depth = 10
+
+        for _ = 1, max_depth do
+            for index = 1, #markers do
+                local opam_files = vim.fn.globpath(path, markers[index], 1, 1)
+                if #opam_files > 0 then
+                    return path
+                end
+            end
+
+            local parent_path = vim.fn.fnamemodify(path, ":h")
+            if parent_path == path then
+                break
+            end
+            path = parent_path
+        end
+    end
+    return nil
+end
 
 if shell:match('pwsh') then
     nvim.env.cli_nf  = "New-Item -Path"
@@ -105,6 +142,12 @@ nvim.env.get_proj_root = function()
         if client.config and client.config.root_dir then
             return client.config.root_dir
         end
+    end
+
+    -- Characteristics
+    local filetype_root = get_proj_root_from_filetype()
+    if filetype_root then
+        return filetype_root
     end
 
     -- Git folder

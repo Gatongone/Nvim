@@ -21,6 +21,7 @@ local function get_command()
             file    = vim.fn.expand('%'),
             exename = vim.fn.fnamemodify(vim.fn.expand('%'), ":t:r"),
             delete  = nvim.env.cli_rmf,
+            proj    = vim.fn.fnamemodify(nvim.env.get_proj_root(), ":t")
         }):gsub("/", nvim.env.dir_sp):gsub(";", nvim.env.cli_sp)
         if i < #lang.cmd then
             cmd = nvim.env.cli_try(cmd).." || "
