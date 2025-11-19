@@ -1,6 +1,6 @@
 local ex = require("comp.exex")
 function ex.get_cmd(tempfile)
-    return string.format('spf %s --chooser-file="%s"', vim.fn.expand('%:p:h'), tempfile)
+    return string.format('spf %s --chooser-file="%s"', vim.api.nvim_buf_get_name(0), tempfile)
 end
 ex.custom_keymaps = require("core.keymap.superfile")
 ex.keymap_path    = vim.fn.expand("~/.config/superfile/hotkeys.toml")
