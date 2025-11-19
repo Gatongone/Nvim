@@ -2,7 +2,7 @@ local win = nvim.ext.win
 
 local function open_gitui()
     win.create_win(true, {title = "Git"})
-    vim.fn.termopen("gitui")
+    vim.fn.jobstart("gitui", {term = true})
     vim.cmd("startinsert")
 end
 

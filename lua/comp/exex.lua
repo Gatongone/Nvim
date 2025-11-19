@@ -29,6 +29,7 @@ local function on_ex_exit(keymap_config)
         ex.winid = -1
         if vim.fn.filereadable(vim.fn.expand(ex.tempname)) == 1 then
             local selected_files = vim.fn.readfile(ex.tempname)
+            vim.notify(selected_files)
             for _, file in ipairs(selected_files) do
                 vim.cmd('tabnew ' .. vim.fn.fnameescape(file))
             end
@@ -73,7 +74,7 @@ local function open_ex()
     end
 
     -- Open explore
-    vim.fn.termopen(M.get_cmd(ex.tempname), { on_exit = function() on_ex_exit(keymap_config) end })
+    vim.fn.jobstart(M.get_cmd(ex.tempname), { term = true, on_exit = function() on_ex_exit(keymap_config) end })
     vim.cmd("startinsert")
 end
 
