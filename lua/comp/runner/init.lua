@@ -71,7 +71,7 @@ local function run_code_vertically()
     if not cmd then return end
 
     vim.cmd("vertical new")
-    vim.fn.termopen(cmd, { on_exit = function() vim.t.v_runid = -1 end })
+    vim.fn.jobstart(cmd, { term = true, on_exit = function() vim.t.v_runid = -1 end })
     vim.cmd("vertical resize " .. nvim.ext.ui.get_screen_col(0.35))
     bnmap("<C-q>", ":q!<CR>")
     vim.t.v_runid = vim.api.nvim_get_current_win()
