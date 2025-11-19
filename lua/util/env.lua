@@ -9,6 +9,7 @@
 --- @field cli_ls string Command line string of listing files of current directory
 --- @field cli_es string Command line string of escape character
 --- @field cli_sp string Command line string of command separator character
+--- @field cli_try function Hiding command line output error message
 --- @field home string Command line string of home path
 --- @field root string Command line string of root path
 --- @field shell string Current shell
@@ -35,6 +36,9 @@ if shell:match('pwsh') then
     nvim.env.dir_sp  = "\\"
     nvim.env.home    = "~"
     nvim.env.root    = "\\"
+    nvim.env.cli_try  = function(msg)
+        return "(("..msg..")2> $null)"
+    end
 elseif shell:match('cmd') then
     nvim.env.cli_nf  = "echo.>"
     nvim.env.cli_nd  = "mkdir"
@@ -49,6 +53,9 @@ elseif shell:match('cmd') then
     nvim.env.dir_sp  = "\\"
     nvim.env.home    = "%USERPROFILE%"
     nvim.env.root    = "\\"
+    nvim.env.cli_try  = function(msg)
+        return "(("..msg..")2>nul)"
+    end
 else
     nvim.env.cli_nf  = "touch"
     nvim.env.cli_nd  = "mkdir"
@@ -63,6 +70,9 @@ else
     nvim.env.dir_sp  = "/"
     nvim.env.home    = "~"
     nvim.env.root    = "/"
+    nvim.env.cli_try  = function(msg)
+        return "(("..msg..")2> /dev/null)"
+    end
 end
 
 nvim.env.shell = shell

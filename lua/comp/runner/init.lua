@@ -11,15 +11,24 @@ local function get_command()
     local filetype = vim.bo.filetype
     local lang = cmds[filetype]
     if not lang then
-        vim.notify("Unknown runner for '" .. filetype .. "'.")
+        vim.notify("Unknown runner for '" .. filetype .. "'.", vim.log.levels.ERROR)
         return nil
     end
-    return string.replace(lang.cmd,
+    local result = ""
+    for i = 1, #lang.cmd do
+        local cmd = string.replace(lang.cmd[i],
         {
             file    = vim.fn.expand('%'),
             exename = vim.fn.fnamemodify(vim.fn.expand('%'), ":t:r"),
             delete  = nvim.env.cli_rmf,
         }):gsub("/", nvim.env.dir_sp):gsub(";", nvim.env.cli_sp)
+        if i < #lang.cmd then
+            cmd = nvim.env.cli_try(cmd).." || "
+        end
+        result = result..cmd
+    end
+    vim.notify(result)
+    return result
 end
 
 --- Run file in a float window
