@@ -49,9 +49,9 @@ local function open_kd()
         })
         string.gsub(selection, '"', '\"')
         if selection:find('%s') ~= nil or selection:match("^[A-Za-z]+$") == nil then
-            vim.fn.termopen('kd -t "' .. selection .. '"', { on_exit = on_kd_exit })
+            vim.fn.jobstart('kd -t "' .. selection .. '"', { term = true, on_exit = on_kd_exit })
         else
-            vim.fn.termopen('kd "' .. selection .. '"', { on_exit = on_kd_exit })
+            vim.fn.jobstart('kd "' .. selection .. '"', { term = true, on_exit = on_kd_exit })
         end
 
         vim.cmd("startinsert")

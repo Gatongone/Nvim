@@ -2,7 +2,7 @@ local win = nvim.ext.win
 
 local function open_lazygit()
     win.create_win(true, {title = "Git"})
-    vim.fn.termopen("lazygit")
+    vim.fn.jobstart("lazygit", {term = true})
     vim.cmd("startinsert")
 end
 

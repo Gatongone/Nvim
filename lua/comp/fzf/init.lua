@@ -80,12 +80,12 @@ local function open_fzf()
     local workspace = nvim.env.get_proj_root()
     if workspace then
         if vim.fn.executable("fd") == 1 then
-            vim.fn.termopen("fd "..fd_exclude.. " . "..workspace.." | fzf "..previewer.."\\"..style..keymap, { on_exit = on_fzf_exit })
+            vim.fn.jobstart("fd "..fd_exclude.. " . "..workspace.." | fzf "..previewer.."\\"..style..keymap, { term = true, on_exit = on_fzf_exit })
         else
-            vim.fn.termopen("find "..workspace.." -type f \\( " ..find_exclude.. " \\) | fzf "..previewer..style..keymap, { on_exit = on_fzf_exit })
+            vim.fn.jobstart("find "..workspace.." -type f \\( " ..find_exclude.. " \\) | fzf "..previewer..style..keymap, { term = true, on_exit = on_fzf_exit })
         end
     else
-        vim.fn.termopen("fzf"..style..keymap)
+        vim.fn.jobstart("fzf"..style..keymap, { term = true })
     end
     vim.cmd("startinsert")
 end
