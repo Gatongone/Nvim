@@ -1,6 +1,6 @@
 local ex = require("comp.exex")
 function ex.get_cmd(tempfile)
-    return string.format('yazi %s --chooser-file="%s"', vim.api.nvim_buf_get_name(0), tempfile)
+    return string.format('yazi %s --chooser-file="%s"', vim.fn.expand('%:p:h'), tempfile)
 end
 ex.custom_keymaps = require("core.keymap.yazi")
 ex.keymap_path    = vim.fn.expand("~/.config/yazi/keymap.toml")
