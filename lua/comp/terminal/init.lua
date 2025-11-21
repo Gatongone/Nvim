@@ -16,7 +16,7 @@ vim.t.h_termid = -1
 
 --- Open Terminal as float window
 local function open_terminal()
-    if vim.t.f_termid >= 0 and vim.api.nvim_win_is_valid(vim.t.f_termid) then
+    if vim.t.f_termid and vim.t.f_termid >= 0 and vim.api.nvim_win_is_valid(vim.t.f_termid) then
         vim.api.nvim_set_current_win(vim.t.f_termid)
         return
     end
@@ -30,7 +30,7 @@ end
 
 --- Open Ternimal as horizontally window
 local function open_terminal_horizontally()
-    if vim.t.h_termid >= 0 and vim.api.nvim_win_is_valid(vim.t.h_termid) then
+    if vim.t.h_termid and vim.t.h_termid >= 0 and vim.api.nvim_win_is_valid(vim.t.h_termid) then
         vim.api.nvim_set_current_win(vim.t.h_termid)
         return
     end
@@ -46,7 +46,7 @@ end
 
 --- Open Ternimal as vertically window
 local function open_terminal_vertically()
-    if vim.t.v_termid >= 0 and vim.api.nvim_win_is_valid(vim.t.v_termid) then
+    if vim.t.v_termid and vim.t.v_termid >= 0 and vim.api.nvim_win_is_valid(vim.t.v_termid) then
         vim.api.nvim_set_current_win(vim.t.v_termid)
         return
     end

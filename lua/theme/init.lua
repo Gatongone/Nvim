@@ -23,7 +23,7 @@ local function get_gitdiff_scheme(scheme)
         add    = scheme.base0B,
         change = scheme.base0D,
         delete = scheme.base0E,
-        text   = scheme.base01,
+        text   = scheme.base05,
     }
 end
 
@@ -60,8 +60,9 @@ local function setup_scheme(theme_name, opts)
     theme.base   =
     {
         -- Editor
-        NormalFloat                         = { fg = scheme.base05, bg = scheme.base01 },
-        Normal                              = { fg = scheme.base05, bg = scheme.base00 },
+        NormalFloat                         = { fg = scheme.base05 },
+        Normal                              = { fg = scheme.base05, bg = scheme.base01 },
+        NormalNC                            = { fg = scheme.base05, bg = scheme.base00 },
         Comment                             = { fg = scheme.base03, style = style.comment_style },
         Constant                            = { fg = scheme.base0C },
         String                              = { fg = scheme.base0B, style = style.string_style },
@@ -98,11 +99,11 @@ local function setup_scheme(theme_name, opts)
         Conceal                             = { fg = scheme.base03 },
         Directory                           = { fg = scheme.base0F },
 
-        WinBar                              = { bg = scheme.base01 },
-        WinBarNC                            = { bg = scheme.base01 },
-        TabLine                             = { bg = scheme.base01, fg = scheme.base03 },
-        TabLineFill                         = { bg = scheme.base02 },
-        TabLineSel                          = { fg = scheme.base05, bg = scheme.base00 },
+        WinBar                              = { bg = scheme.base00 },
+        WinBarNC                            = { bg = scheme.base00 },
+        TabLine                             = { bg = scheme.base00, fg = scheme.base03 },
+        TabLineFill                         = { bg = scheme.base00 },
+        TabLineSel                          = { bg = scheme.base00, fg = scheme.base05 },
 
         DiffAdd                             = { bg = diff.add },
         DiffChange                          = { bg = diff.change },
@@ -126,11 +127,12 @@ local function setup_scheme(theme_name, opts)
         SpellCap                            = { fg = scheme.base0A },
         SpellLocal                          = { fg = scheme.base0A },
         SpellRare                           = { fg = scheme.base0A },
-        StatusLine                          = { fg = scheme.base05, bg = scheme.base01 },
-        StatusLineNC                        = { fg = scheme.base03 },
+        StatusLine                          = { fg = scheme.base05, bg = scheme.base00 },
+        StatusLineNC                        = { fg = scheme.base05 },
         StatusLineTerm                      = { fg = scheme.base05 },
-        StatusLineTermNC                    = { fg = scheme.base03 },
-        Terminal                            = { fg = scheme.base05, bg = scheme.base02 },
+        StatusLineTermNC                    = { fg = scheme.base05 },
+        Terminal                            = { fg = scheme.base05 },
+        TerminalNC                          = { fg = scheme.base05 },
         VisualNOS                           = { fg = scheme.base03 },
         WarningMsg                          = { fg = scheme.base0A },
         WildMenu                            = { fg = scheme.base02, bg = scheme.base09 },
@@ -453,8 +455,8 @@ local function setup_scheme(theme_name, opts)
         ["@variable.cpp"]                   = { fg = scheme.base05 },
 
         -- Nvim Tree
-        NvimTreeNormal                      = { fg = scheme.base05, bg = scheme.base00 },
-        NvimTreeNormalNC                    = { fg = scheme.base05, bg = scheme.base00 },
+        NvimTreeNormal                      = { fg = scheme.base05 },
+        NvimTreeNormalNC                    = { fg = scheme.base05 },
         NvimTreeFolderIcon                  = { fg = scheme.base0A },
         NvimTreeRootFolder                  = { fg = scheme.base0F },
         NvimTreeExecFile                    = { fg = scheme.base08, style = "NONE" },
@@ -467,10 +469,10 @@ local function setup_scheme(theme_name, opts)
         NvimTreeGitDeleted                  = { fg = scheme.base0E },
 
         -- NeoTree
-        NeoTreeNormal                       = { fg = scheme.base05, bg = scheme.base00 },
-        NeoTreeNormalNC                     = { fg = scheme.base05, bg = scheme.base00 },
-        NeoTreeVertSplit                    = { fg = scheme.base02, bg = scheme.base02 },
-        NeoTreeWinSeparator                 = { fg = scheme.base02, bg = scheme.base02 },
+        NeoTreeNormal                       = { fg = scheme.base05 },
+        NeoTreeNormalNC                     = { fg = scheme.base05 },
+        NeoTreeVertSplit                    = { fg = scheme.base02 },
+        NeoTreeWinSeparator                 = { fg = scheme.base02 },
         NeoTreeDirectoryIcon                = { fg = scheme.base0A },
         NeoTreeRootName                     = { fg = scheme.base0F },
         NeoTreeExecFile                     = { fg = scheme.base08, style = "NONE" },
@@ -491,7 +493,7 @@ local function setup_scheme(theme_name, opts)
         IndentBlanklineSpaceChar            = { fg = "#414141" },
         IndentBlanklineSpaceCharBlankline   = { fg = "#414141" },
         IndentBlanklineContextChar          = { fg = "#505050" },
-        FloatBorder                         = { bg = scheme.base00 },
+        FloatBorder                         = { bg = scheme.none },
 
         -- Cmp
         CmpDocumentation                    = { fg = scheme.base05, bg = scheme.bg_float },
@@ -603,17 +605,24 @@ local function setup_scheme(theme_name, opts)
     if style.transparent_bg then
         theme.base = vim.tbl_extend("force", theme.base,
         {
-            DapUIEndofBuffer = { bg = scheme.base01 },
+            DapUIEndofBuffer = { bg = scheme.base00 },
         })
     else
-       vim.api.nvim_set_hl(0, "DimNormal", { bg = scheme.base01 })
-       vim.api.nvim_create_autocmd("FileType",
-       {
-           pattern = { "netrw", "notify" },
-           callback = function()
-               vim.wo.winhl = "Normal:DimNormal,NormalNC:DimNormal"
-           end
-       })
+        theme.base.NeoTreeNormal         = { fg = scheme.base05, bg = scheme.base00 }
+        theme.base.NeoTreeNormalNC       = { fg = scheme.base05, bg = scheme.base00 }
+        theme.base.NeoTreeVertSplit      = { fg = scheme.base01, bg = scheme.base00 }
+        theme.base.NeoTreeWinSeparator   = { fg = scheme.base01, bg = scheme.base00 }
+        theme.base.MasonNormal           = { fg = scheme.base05, bg = scheme.base00 }
+        theme.base.NvimTreeNormal        = { fg = scheme.base05, bg = scheme.base00 }
+        theme.base.NvimTreeNormalNC      = { fg = scheme.base05, bg = scheme.base00 }
+        theme.base.WinSeparator          = { fg = scheme.base00, bg = scheme.base00 , style = "NONE" }
+        theme.base.NetrwLink             = { fg = scheme.base0B, bg = scheme.base00 , style = "bold" }
+        theme.base.NetrwFile             = { fg = scheme.base03, bg = scheme.base00 , style = "bold" }
+        theme.base.NetrwDirectory        = { fg = scheme.base0A, bg = scheme.base00 , style = "bold" }
+        theme.base.NetrwCopied           = { fg = scheme.base0B, bg = scheme.base00 , style = "bold" }
+        theme.base.NetrwCut              = { fg = scheme.base0C, bg = scheme.base00 , style = "bold" }
+        theme.base.NetrwMarkFile         = { fg = scheme.base0A, bg = scheme.base00 , style = "bold" }
+        vim.api.nvim_set_hl(0, "DimNormal", { bg = scheme.base00 })
     end
 
     theme.base = vim.tbl_extend("force", theme.base, style.highlights or {})
