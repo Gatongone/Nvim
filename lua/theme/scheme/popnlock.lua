@@ -1,7 +1,7 @@
 return
 {
-    base00 = "#20213a",
-    base01 = "#1c1c2d",
+    base00 = "#1c1c2d",
+    base01 = "#20213a",
     base02 = "#3621a7",
     base03 = "#97896f",
     base04 = "#1f2547",
