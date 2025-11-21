@@ -60,8 +60,8 @@ local function setup_scheme(theme_name, opts)
     theme.base   =
     {
         -- Editor
-        NormalFloat                         = { fg = scheme.base05, bg = scheme.base00 },
-        Normal                              = { fg = scheme.base05, bg = scheme.base02 },
+        NormalFloat                         = { fg = scheme.base05, bg = scheme.base01 },
+        Normal                              = { fg = scheme.base05, bg = scheme.base00 },
         Comment                             = { fg = scheme.base03, style = style.comment_style },
         Constant                            = { fg = scheme.base0C },
         String                              = { fg = scheme.base0B, style = style.string_style },
@@ -98,6 +98,8 @@ local function setup_scheme(theme_name, opts)
         Conceal                             = { fg = scheme.base03 },
         Directory                           = { fg = scheme.base0F },
 
+        WinBar                              = { bg = scheme.base01 },
+        WinBarNC                            = { bg = scheme.base01 },
         TabLine                             = { bg = scheme.base01, fg = scheme.base03 },
         TabLineFill                         = { bg = scheme.base02 },
         TabLineSel                          = { fg = scheme.base05, bg = scheme.base00 },
@@ -124,7 +126,7 @@ local function setup_scheme(theme_name, opts)
         SpellCap                            = { fg = scheme.base0A },
         SpellLocal                          = { fg = scheme.base0A },
         SpellRare                           = { fg = scheme.base0A },
-        StatusLine                          = { fg = scheme.base05, bg = scheme.base03 },
+        StatusLine                          = { fg = scheme.base05, bg = scheme.base01 },
         StatusLineNC                        = { fg = scheme.base03 },
         StatusLineTerm                      = { fg = scheme.base05 },
         StatusLineTermNC                    = { fg = scheme.base03 },
@@ -433,10 +435,10 @@ local function setup_scheme(theme_name, opts)
         VimwikiTag                          = { fg = scheme.base08 },
         VimwikiMarkers                      = { fg = scheme.base03 },
 
-        ColorColumn                         = { bg = scheme.base00 },
-        SignColumn                          = { bg = scheme.base02 },
+        ColorColumn                         = { bg = scheme.base02 },
+        SignColumn                          = { bg = scheme.none   },
         CursorColumn                        = { bg = scheme.base04 },
-        CursorLine                          = { bg = scheme.base07 },
+        CursorLine                          = { bg = scheme.base04 },
         FoldColumn                          = { fg = scheme.none },
         PmenuSbar                           = { bg = scheme.base03 },
         PmenuThumb                          = { bg = scheme.base05 },
@@ -583,26 +585,35 @@ local function setup_scheme(theme_name, opts)
 
     if style.telescope_theme then
         theme.base = vim.tbl_extend("force", theme.base,
-            {
-                -- Telescope
-                TelescopeBorder        = { fg = scheme.base00, bg = scheme.base00 },
-                TelescopePromptCounter = { fg = scheme.base07, bg = scheme.base03 },
-                TelescopePromptBorder  = { fg = scheme.base03, bg = scheme.base03 },
-                TelescopePromptNormal  = { fg = scheme.base07, bg = scheme.base03 },
-                TelescopePromptPrefix  = { fg = scheme.base0A, bg = scheme.base03 },
-                TelescopePreviewTitle  = { fg = scheme.base02, bg = scheme.base0F },
-                TelescopePromptTitle   = { fg = scheme.base02, bg = scheme.base0A },
-                TelescopeResultsTitle  = { fg = scheme.base00, bg = scheme.base07 },
-                TelescopeSelection     = { bg = diff.change },
-                TelescopeNormal        = { bg = scheme.base00 },
-            })
+        {
+            -- Telescope
+            TelescopeBorder        = { fg = scheme.base00, bg = scheme.base00 },
+            TelescopePromptCounter = { fg = scheme.base07, bg = scheme.base03 },
+            TelescopePromptBorder  = { fg = scheme.base03, bg = scheme.base03 },
+            TelescopePromptNormal  = { fg = scheme.base07, bg = scheme.base03 },
+            TelescopePromptPrefix  = { fg = scheme.base0A, bg = scheme.base03 },
+            TelescopePreviewTitle  = { fg = scheme.base02, bg = scheme.base0F },
+            TelescopePromptTitle   = { fg = scheme.base02, bg = scheme.base0A },
+            TelescopeResultsTitle  = { fg = scheme.base00, bg = scheme.base07 },
+            TelescopeSelection     = { bg = diff.change },
+            TelescopeNormal        = { bg = scheme.base00 },
+        })
     end
 
     if style.transparent_bg then
         theme.base = vim.tbl_extend("force", theme.base,
-            {
-                DapUIEndofBuffer = { bg = scheme.base01 },
-            })
+        {
+            DapUIEndofBuffer = { bg = scheme.base01 },
+        })
+    else
+       vim.api.nvim_set_hl(0, "DimNormal", { bg = scheme.base01 })
+       vim.api.nvim_create_autocmd("FileType",
+       {
+           pattern = { "netrw", "notify" },
+           callback = function()
+               vim.wo.winhl = "Normal:DimNormal,NormalNC:DimNormal"
+           end
+       })
     end
 
     theme.base = vim.tbl_extend("force", theme.base, style.highlights or {})
