@@ -15,6 +15,7 @@ local default_config =
     color_overrides      = {},
     telescope_theme      = false,
     use_original_palette = false,
+    transparent_bg       = nvim.setting.appearance.transparent_background
 }
 
 local function get_gitdiff_scheme(scheme)
@@ -603,10 +604,9 @@ local function setup_scheme(theme_name, opts)
     end
 
     if style.transparent_bg then
-        theme.base = vim.tbl_extend("force", theme.base,
-        {
-            DapUIEndofBuffer = { bg = scheme.base00 },
-        })
+        theme.base.DapUIEndofBuffer = { bg = scheme.base00 }
+        theme.base.CursorLine       = { bg = util.darken(scheme.base08, 0.55), style = "bold" }
+        theme.base.WinSeparator     = { fg = util.darken(scheme.base05, 0.55), style = "NONE" }
     else
         theme.base.NeoTreeNormal         = { fg = scheme.base05, bg = scheme.base00 }
         theme.base.NeoTreeNormalNC       = { fg = scheme.base05, bg = scheme.base00 }
