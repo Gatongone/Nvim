@@ -412,7 +412,9 @@ end
 
 --- Open a new netrw windows in new tab
 local netrw_open_file_in_new_tab = function(path)
-    vim.cmd([[ let g:netrw_curtop = exists(w:netrw_treetop) ? w:netrw_treetop : b:netrw_curdir ]])
+    if vim.b.netrw_liststyle ~= 1 then
+        vim.cmd([[ let g:netrw_curtop = exists(w:netrw_treetop) ? w:netrw_treetop : b:netrw_curdir ]])
+    end
     vim.cmd('wincmd p')
     vim.cmd(':tabnew '..path)
     netrw_open()
@@ -448,6 +450,18 @@ local netrw_open_file_or_directory = function()
     end
 end
 
+
+--- Edit the file or directory, and then reset highlight
+local netrw_edit_file_or_directory = function()
+    local path = get_curline_path()
+    vim.cmd('wincmd p')
+    vim.cmd(':tabnew '..path)
+    netrw_open()
+    netrw_setup_ui()
+    vim.cmd('wincmd p')
+    vim.cmd('silent! lcd %:p:h')
+end
+
 --- Exit current directory, and then reset highlight
 local netrw_exit_directory = function()
     -- If the folder was expanded, then collapse it
@@ -470,6 +484,7 @@ end
 
 -- Register usercmd and autocmd
 vim.api.nvim_create_user_command("NetrwCancel",               netrw_cancel,                 { })
+vim.api.nvim_create_user_command("NetrwEditFileOrDirectory",  netrw_edit_file_or_directory, { })
 vim.api.nvim_create_user_command("NetrwOpenFileOrDirectory",  netrw_open_file_or_directory, { })
 vim.api.nvim_create_user_command("NetrwExitDirectory",        netrw_exit_directory,         { })
 vim.api.nvim_create_user_command("NetrwPasteFiles",           netrw_paste_files,            { })

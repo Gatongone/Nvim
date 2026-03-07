@@ -26,12 +26,13 @@ end
 -- Default keymaps see: https://superfile.dev/configure/custom-hotkeys/
 local custom_keymaps = string.format(
 [[
-confirm = ['enter', 'right', '%s']
+open_file_with_editor = ['%s']
 cancel_typing = ['ctrl+c', '%s']
 quit = ['%s']
 list_up = ['up', '%s']
 list_down = ['down', '%s']
 parent_directory = ['%s', 'left', 'backspace']
+confirm = ['enter', 'right', '%s']
 copy_items = ['ctrl+c', '%s']
 cut_items = ['ctrl+x', '%s']
 paste_items = ['ctrl+v', 'ctrl+w', '%s']
@@ -42,12 +43,13 @@ file_panel_select_mode_items_select_down = ['%s', '%s']
 file_panel_select_mode_items_select_up = ['%s']
 file_panel_select_all_items = ['']
 ]],
-to_toml_key(ex.open),
+to_toml_key(ex.edit),
 to_toml_key(editor.normal_mode),
 to_toml_key(ex.close_explore),
 to_toml_key(ex.move_to_prev_item),
 to_toml_key(ex.move_to_next_item),
 to_toml_key(ex.move_to_parent_folder),
+to_toml_key(ex.move_to_current_folder),
 to_toml_key(ex.copy),
 to_toml_key(ex.cut),
 to_toml_key(ex.paste),
