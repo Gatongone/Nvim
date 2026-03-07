@@ -95,8 +95,9 @@ nvim.keymap =
         move_to_prev_item        = 'i',                -- Select previous item.
         move_to_next_item        = 'k',                -- Select next item.
         move_to_parent_folder    = 'j',                -- Go back to parent directory.
-        open                     = 'l',                -- Open a file with nvim or enter the directory.
+        move_to_current_folder   = 'l',                -- enter current directory.
 
+        edit                     = 'e',                -- Edit file or directory.
         create_file              = 'nf',               -- Create a file to current directory.
         create_directory         = 'nd',               -- Create a directory to current directory.
         rename                   = 'r',                -- Rename file or directory name.

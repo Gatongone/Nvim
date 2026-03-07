@@ -22,11 +22,10 @@ end
 local custom_keymaps = string.format(
 [[
 [manager]
-prepend_keymap = [
-    { on = %s,                 run = "plugin smart-enter",            desc = "Enter the child directory, or open the file" },
-]
 keymap = [
-    { on = %s,                 run = "enter",                         desc = "Enter the child directory" },
+
+    { on = %s,                 run = "open",                          desc = "enter" },
+    { on = %s,                 run = "enter",                          desc = "Enter the child directory" },
     { on = %s,                 run = "escape",                        desc = "Exit visual mode, clear selected, or cancel search" },
     { on = %s,                 run = "quit",                          desc = "Quit the process" },
     { on = %s,                 run = "arrow -1",                      desc = "Move cursor up" },
@@ -54,8 +53,8 @@ keymap = [
     { on = "f",                run = "filter --smart",                desc = "Filter files" },
 ]
 ]],
-to_toml_key(ex.open),
-to_toml_key(ex.open),
+to_toml_key(ex.move_to_current_folder),
+to_toml_key(ex.edit),
 to_toml_key(editor.normal_mode),
 to_toml_key(ex.close_explore),
 to_toml_key(ex.move_to_prev_item),

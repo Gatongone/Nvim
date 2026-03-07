@@ -25,6 +25,7 @@ copymap <DOWN>     %s
 copymap <LEFT>     %s
 copymap <RIGHT>    %s
 
+map %s         edit
 map %s         quit
 map %s         change_mode normal
 map %s         copy mode=toggle
@@ -39,7 +40,8 @@ map %s         tag_toggle
 to_conf_key(ex.move_to_prev_item),
 to_conf_key(ex.move_to_next_item),
 to_conf_key(ex.move_to_parent_folder),
-to_conf_key(ex.open),
+to_conf_key(ex.move_to_current_folder),
+to_conf_key(ex.edit),
 to_conf_key(ex.close_explore),
 to_conf_key(editor.normal_mode),
 to_conf_key(ex.copy),
