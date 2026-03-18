@@ -28,7 +28,6 @@ local function get_command()
         end
         result = result..cmd
     end
-    vim.notify(result)
     return result
 end
 
