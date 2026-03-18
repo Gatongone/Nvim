@@ -116,7 +116,7 @@ local function setup_scheme(theme_name, opts)
         Folded                              = { fg = scheme.base03 },
         IncSearch                           = { bg = scheme.base02 },
         LineNr                              = { fg = scheme.base03 },
-        MatchParen                          = { bg = diff.text, style = "underline" },
+        MatchParen                          = { bg = none, style = "underline" },
         NonText                             = { fg = scheme.base03 },
         Pmenu                               = { fg = scheme.base05, bg = scheme.base04 },
         PmenuSel                            = { fg = scheme.base02, bg = scheme.base09 },
