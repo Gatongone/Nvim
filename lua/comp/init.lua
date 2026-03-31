@@ -1,7 +1,7 @@
 -- Default
 require("comp.terminal")
 require("comp.jmpword")
-require("comp.runner")
+require("comp.task")
 require("comp.autopairs")
 require("comp.kd")
 

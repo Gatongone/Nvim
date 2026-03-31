@@ -23,15 +23,29 @@ shell = vim.fn.fnamemodify(shell, ':t'):gsub('%.exe$', '')
 
 local proj_characteristics =
 {
-    cs         = {"*.csproj"},
+    cs         = {"*.sln", "*.slnx"},
+    fsharp     = {"*.sln", "*.slnx"},
+    c          = {"*.sln", "*.slnx", "CMakeLists.txt"},
+    cpp        = {"*.sln", "*.slnx", "CMakeLists.txt"},
+    zig        = {"build.zig", "build.zig.zon"},
     ocaml      = {"*.opam", "dune-project", "dune-workspace"},
     rust       = {"Cargo.toml"},
     go         = {"go.mod"},
+    typescript = {"package.json", "yarn.lock", "package-lock.json"},
     javascript = {"package.json", "yarn.lock", "package-lock.json"},
     haskell    = {"*.cabal", "stack.yaml", "package.yaml"},
+    java       = {"opm.xml", "settings.gradle"},
     python     = {"pyproject.toml", "setup.py", "requirements.txt", "Pipfile"},
     ruby       = {"Gemfile"},
-    php        = {"composer.json"}
+    php        = {"composer.json"},
+    lean       = {"lakefile.lean", "lean-toolchain"},
+    agda       = {".agda-lib", ".agdaide", "agda.config"},
+    coq        = {"dune-project"},
+    moonbit    = {"moon.mod.json"},
+    swift      = {"*.xcodeproj"},
+    kotlin     = {"settings.gradle.kts", "opm.xml"},
+    odin       = {"main.odin"},
+    v          = {"v.mod"},
 }
 
 local get_proj_root_from_filetype = function()
@@ -113,7 +127,11 @@ else
 end
 
 nvim.env.shell = shell
-nvim.env.os    = vim.loop.os_uname().sysname
+if vim.uv.os_uname then
+    nvim.env.os = vim.uv.os_uname().sysname
+elseif vim.loop.os_uname then
+    nvim.env.os = vim.loop.os_uname().sysname
+end
 nvim.env.get_line_ending = function()
     local line_endings = "LF"
     if vim.bo.fileformat == "dos" then
@@ -125,6 +143,19 @@ nvim.env.get_line_ending = function()
     return line_endings
 end
 nvim.env.get_proj_root = function()
+    -- Neovim workspace
+    if vim.fs.root then -- Neovim 0.10+
+        local root = vim.fs.root(0, {".nvim"})
+        if root then
+            return root
+        end
+    else -- Old version
+        local root = vim.fn.finddir(".nvim", ".;")
+        if root ~= "" then
+            return vim.fn.fnamemodify(root, ":h")
+        end
+    end
+
     -- Project folders
     local workspace_folders = vim.lsp.buf.list_workspace_folders()
     if workspace_folders and #workspace_folders > 0 then
@@ -132,10 +163,10 @@ nvim.env.get_proj_root = function()
     end
 
     -- Lsp root dir
-    local clients
+    local clients = {}
     if vim.lsp.get_clients then
         clients = vim.lsp.get_clients({ bufnr = 0 }) -- Neovim 0.10+
-    else
+    elseif vim.lsp.get_active_clients then
         clients = vim.lsp.get_active_clients({ bufnr = 0 }) -- Old version
     end
     for _, client in ipairs(clients) do
@@ -151,20 +182,16 @@ nvim.env.get_proj_root = function()
     end
 
     -- Git folder
-    local current_file = vim.api.nvim_buf_get_name(0)
-    if current_file == '' then
-        current_file = vim.fn.getcwd()
+    if vim.fs.root then
+        local root = vim.fs.root(0, {".git"})
+        if root then
+            return root
+        end
     else
-        current_file = vim.fn.fnamemodify(current_file, ':p:h')
-    end
-
-    local git_dir = vim.fs.find('.git', {
-        path = current_file,
-        upward = true,
-        type = 'directory'
-    })[1]
-    if git_dir then
-        return vim.fn.fnamemodify(git_dir, ':h')
+        local root = vim.fn.finddir(".git", ".;")
+        if root ~= "" then
+            return vim.fn.fnamemodify(root, ":h")
+        end
     end
 
     -- Current folder
