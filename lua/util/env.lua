@@ -21,58 +21,6 @@ nvim.env = { }
 local shell = vim.o.shell:lower()
 shell = vim.fn.fnamemodify(shell, ':t'):gsub('%.exe$', '')
 
-local proj_characteristics =
-{
-    cs         = {"*.sln", "*.slnx"},
-    fsharp     = {"*.sln", "*.slnx"},
-    c          = {"*.sln", "*.slnx", "CMakeLists.txt"},
-    cpp        = {"*.sln", "*.slnx", "CMakeLists.txt"},
-    zig        = {"build.zig", "build.zig.zon"},
-    ocaml      = {"*.opam", "dune-project", "dune-workspace"},
-    rust       = {"Cargo.toml"},
-    go         = {"go.mod"},
-    typescript = {"package.json", "yarn.lock", "package-lock.json"},
-    javascript = {"package.json", "yarn.lock", "package-lock.json"},
-    haskell    = {"*.cabal", "stack.yaml", "package.yaml"},
-    java       = {"opm.xml", "settings.gradle"},
-    python     = {"pyproject.toml", "setup.py", "requirements.txt", "Pipfile"},
-    ruby       = {"Gemfile"},
-    php        = {"composer.json"},
-    lean       = {"lakefile.lean", "lean-toolchain"},
-    agda       = {".agda-lib", ".agdaide", "agda.config"},
-    coq        = {"dune-project"},
-    moonbit    = {"moon.mod.json"},
-    swift      = {"*.xcodeproj"},
-    kotlin     = {"settings.gradle.kts", "opm.xml"},
-    odin       = {"main.odin"},
-    v          = {"v.mod"},
-}
-
-local get_proj_root_from_filetype = function()
-    local markers = proj_characteristics[vim.bo.filetype]
-
-    if markers then
-        local path = vim.fn.expand('%:p:h') or vim.fn.getcwd()
-        local max_depth = 10
-
-        for _ = 1, max_depth do
-            for index = 1, #markers do
-                local opam_files = vim.fn.globpath(path, markers[index], 1, 1)
-                if #opam_files > 0 then
-                    return path
-                end
-            end
-
-            local parent_path = vim.fn.fnamemodify(path, ":h")
-            if parent_path == path then
-                break
-            end
-            path = parent_path
-        end
-    end
-    return nil
-end
-
 if shell:match('pwsh') then
     nvim.env.cli_nf  = "New-Item -Path"
     nvim.env.cli_nd  = "New-Item -ItemType Directory"
@@ -132,6 +80,7 @@ if vim.uv.os_uname then
 elseif vim.loop.os_uname then
     nvim.env.os = vim.loop.os_uname().sysname
 end
+
 nvim.env.get_line_ending = function()
     local line_endings = "LF"
     if vim.bo.fileformat == "dos" then
@@ -142,6 +91,7 @@ nvim.env.get_line_ending = function()
 
     return line_endings
 end
+
 nvim.env.get_proj_root = function()
     -- Neovim workspace
     if vim.fs.root then -- Neovim 0.10+
@@ -162,7 +112,7 @@ nvim.env.get_proj_root = function()
         return workspace_folders[1]
     end
 
-    -- Lsp root dir
+    -- LSP root dir
     local clients = {}
     if vim.lsp.get_clients then
         clients = vim.lsp.get_clients({ bufnr = 0 }) -- Neovim 0.10+
@@ -173,12 +123,6 @@ nvim.env.get_proj_root = function()
         if client.config and client.config.root_dir then
             return client.config.root_dir
         end
-    end
-
-    -- Characteristics
-    local filetype_root = get_proj_root_from_filetype()
-    if filetype_root then
-        return filetype_root
     end
 
     -- Git folder

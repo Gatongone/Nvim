@@ -87,3 +87,14 @@ vmap(editor.comment,  function() vim.cmd.norm('gc')  end)
 
 -- Close tab or window
 nmap(editor.close,                       ':q!<CR>')
+
+-- Align
+vmap(editor.align, function()
+    vim.ui.input({ prompt = "Align " }, function(input)
+        if input then
+            if pcall(function() vim.cmd(string.format("silent! '<,'>Align %s", input)) end) then
+                vim.cmd("stopinsert")
+            end
+        end
+    end)
+end)

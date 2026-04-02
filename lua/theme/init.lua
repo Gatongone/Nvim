@@ -1,7 +1,7 @@
--- Refer to luisiacc/gruvbox-baby
 local M              = {}
 local util           = require("theme.util")
 local none           = "NONE"
+
 local default_config =
 {
     background_color     = "medium",
@@ -118,8 +118,6 @@ local function setup_scheme(theme_name, opts)
         LineNr                              = { fg = scheme.base03 },
         MatchParen                          = { bg = none, style = "underline" },
         NonText                             = { fg = scheme.base03 },
-        Pmenu                               = { fg = scheme.base05, bg = scheme.base04 },
-        PmenuSel                            = { fg = scheme.base02, bg = scheme.base09 },
         Question                            = { fg = scheme.base0F },
         QuickFixLine                        = { fg = scheme.base02, bg = scheme.base0A },
         Search                              = { bg = scheme.base02 },
@@ -443,8 +441,11 @@ local function setup_scheme(theme_name, opts)
         CursorColumn                        = { bg = scheme.base04 },
         CursorLine                          = { bg = scheme.base04 },
         FoldColumn                          = { fg = scheme.none },
-        PmenuSbar                           = { bg = scheme.base03 },
-        PmenuThumb                          = { bg = scheme.base05 },
+        Pmenu                               = { fg = scheme.base05, bg = none },
+        PmenuSel                            = { fg = scheme.base05, bg = scheme.base08, style = "bold" },
+        PmenuSbar                           = { bg = none },
+        PmenuThumb                          = { bg = scheme.base08 },
+        PmenuThumb                          = { fg = none, bg = scheme.base05 },
         EasyMotionShade                     = { fg = none },
         Visual                              = { bg = scheme.base02 },
         MultiCursor                         = { bg = scheme.base03 },
@@ -604,10 +605,16 @@ local function setup_scheme(theme_name, opts)
     end
 
     if style.transparent_bg then
+        vim.o.winborder = "rounded"
+        pcall(function() vim.o.pumborder = "rounded" end)
         theme.base.DapUIEndofBuffer = { bg = scheme.base00 }
         theme.base.CursorLine       = { bg = util.darken(scheme.base08, 0.55), style = "bold" }
         theme.base.WinSeparator     = { fg = util.darken(scheme.base05, 0.55), style = "NONE" }
     else
+        theme.base.Pmenu                 = { fg = scheme.base05, bg = scheme.base00 }
+        theme.base.PmenuSel              = { fg = scheme.base05, bg = scheme.base08, style = "bold" }
+        theme.PmenuSbar                  = { bg = none}
+        theme.PmenuThumb                 = { bg = scheme.base08 }
         theme.base.NeoTreeNormal         = { fg = scheme.base05, bg = scheme.base00 }
         theme.base.NeoTreeNormalNC       = { fg = scheme.base05, bg = scheme.base00 }
         theme.base.NeoTreeVertSplit      = { fg = scheme.base01, bg = scheme.base00 }

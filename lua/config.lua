@@ -56,7 +56,8 @@ nvim.keymap =
         goback                   = 'gb',               -- Go back to previous edited position.
         goto                     = 'gt',               -- Go to everywhere.
         comment                  = '<C-_>',            -- Commenting lines.
-        close                    = '<C-q>'             -- Forced to close Tab or window.
+        close                    = '<C-q>',            -- Forced to close Tab or window.
+        align                    = 'A'                 -- Align with given character.
     },
     tab =
     {
@@ -115,8 +116,10 @@ nvim.keymap =
         format_code              = '<C-f>',            -- Apply formatting.
         rename_buf               = '<C-r>',            -- Rename buffer variable.
         open_hover_doc           = '<C-d>',            -- Open hover document.
+        open_hover_diag          = '<C-h>',            -- Open warn/error diagnostic where on cursor.
         open_error_diag          = '<C-e>',            -- Open buffer error diagnostic.
         open_code_action         = '<C-a>',            -- Open code action.
+        open_sign_help           = '<C-p>',            -- Open signature help.
 
         goto_definition          = 'gd',               -- Go to definition.
         goto_implementation      = 'gi',               -- Go to implementation.
@@ -127,11 +130,10 @@ nvim.keymap =
 
         cmp_prev                 = '<A-i>',            -- Go to previous cmp item.
         cmp_next                 = '<A-k>',            -- Go to previous cmp item.
-        cmp_abort                = '<A-j>',            -- Abort cmp.
-        cmp_complete             = '<A-l>',            -- Complete cmp suggestion.
-        cmp_confirm              = '<Tab>',            -- Confirm cmp item.
-        cmp_doc_scroll_up        = '<C-i>',            -- Cmp document scroll up.
-        cmp_doc_scroll_down      = '<C-k>',            -- Cmp document scroll down.
+        cmp_close                = '<A-j>',            -- Close cmp diagnostic.
+        cmp_accept               = '<A-l>',            -- Confirm cmp suggestion.
+        -- cmp_open                 = '<C-Space>',        -- Open cmp diagnostic.
+        cmp_open                 = '<A-l>',        -- Open cmp diagnostic.
 
         dap_continue             = '<Leader>`',        -- Continue.
         dap_breakpoint           = '<Leader>d',        -- Toggle breakpoint.

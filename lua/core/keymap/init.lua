@@ -1,28 +1,43 @@
 local map  = vim.keymap.set
-local opt  = {noremap = true, silent = true }
+local opts  = {noremap = true, silent = true}
+local function merge(t1, t2)
+    local result = {}
+    if t1 then
+        for k, v in pairs(t1) do
+            result[k] = v
+        end
+    end
+    if t2 then
+        for k, v in pairs(t2) do
+            result[k] = v
+        end
+    end
+    return result
+end
 bnmap = function(before, after)
     vim.cmd("nnoremap <silent><buffer> ".. before .. " " .. after)
 end
 bvmap = function(before, after)
     vim.cmd("vnoremap <silent><buffer> ".. before .. " " .. after)
 end
-nmap = function(before, after)
-    map('n',before,after,opt)
+nmap = function(before, after, options)
+    map('n',before, after, merge(opts, options))
 end
-imap = function(before, after)
-    map('i',before,after,opt)
+imap = function(before, after, options)
+    map('i',before, after, merge(opts, options))
 end
-vmap = function(before, after)
-    map('v',before,after,opt)
+vmap = function(before, after, options)
+    map('v',before, after, merge(opts, options))
 end
-tmap = function(before, after)
-    map('t',before,after,opt)
+tmap = function(before, after, options)
+    map('t',before, after, merge(opts, options))
 end
-xmap = function(before, after)
-    map('x',before,after,opt)
+xmap = function(before, after, options)
+    map('x',before, after, merge(opts, options))
 end
 
 require("core.keymap.editor")
 require("core.keymap.tab")
 require("core.keymap.win")
+require("core.keymap.lsp")
 require("core.keymap.translate")
