@@ -1,11 +1,11 @@
 local file = require("config").setting.file
 
--- Intent
-vim.o.tabstop      = file.intent_num
-vim.bo.tabstop     = file.intent_num
-vim.o.softtabstop  = file.intent_num
-vim.o.shiftwidth   = file.intent_num
-if file.tab_intent == false then
+-- Indent
+vim.o.tabstop      = file.indent_num
+vim.bo.tabstop     = file.indent_num
+vim.o.softtabstop  = file.indent_num
+vim.o.shiftwidth   = file.indent_num
+if file.tab_indent == false then
     vim.o.expandtab    = true
     vim.bo.expandtab   = true
 end
