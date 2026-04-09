@@ -129,7 +129,7 @@ nvim.keymap =
         goto_next_diag           = 'gl',               -- Go to next diagnostic item.
 
         cmp_prev                 = '<A-i>',            -- Go to previous cmp item.
-        cmp_next                 = '<A-k>',            -- Go to previous cmp item.
+        cmp_next                 = '<A-k>',            -- Go to next cmp item.
         cmp_close                = '<A-j>',            -- Close cmp diagnostic.
         cmp_accept               = '<A-l>',            -- Confirm cmp suggestion. Can be mapped to the same key as cmp_open.
         cmp_open                 = '<A-l>',            -- Open cmp diagnostic. Can be mapped to the same key as cmp_accept.
@@ -159,7 +159,7 @@ nvim.setting =
     },
     appearance =
     {
-        theme                  = 'popnlock',           -- Neovim theme, 'none' for default, theme files will be collected to 'nvim/lua/theme/scheme'.
+        theme                  = 'popnlock',           -- Neovim theme, base on Base16 scheme. 'none' for default, theme files will be collected to 'nvim/lua/theme/scheme'.
         fill_char              = ' ',                  -- Characters to fill the statuslines, vertical separators and special lines in the window.
         show_line_number       = true,                 -- Enable line number.
         relative_line_number   = false,                -- Enable relative line number (This option will only take effect when 'show_line_number' is true).
