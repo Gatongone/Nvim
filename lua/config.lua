@@ -148,6 +148,7 @@ return
     {
         editor =
         {
+            translator               = 'kd',               -- Translation engine. 'kd' is builtin supported.
             explore                  = 'netrw',            -- Explore implementation, advanced 'netrw' for default. 'yazi', 'ranger', 'superfile' are builtin supported.
             finder                   = 'fzf',              -- Finder implementation, 'fzf', 'telescope' are builtin supported.
             git                      = 'lazygit',          -- Git TUI implementation, 'lazygit', 'gitui' are builtin supported.

@@ -42,7 +42,7 @@ init.lua                  ← Entry point: loads config → util → core → co
 │
 ├── lua/util/             ← Utility layer
 │   ├── env.lua           ← Cross-platform shell environment abstraction (bash/cmd/pwsh)
-│   └── ext.lua           ← Extended APIs: nvim.ext.win / buf / tab / ui, table/string extensions
+│   └── ext.lua           ← Extended APIs: win / buf / tab / ui / table string extensions
 │
 ├── lua/core/             ← Native Neovim setup
 │   ├── setting/          ← Editor options (appearance, file encoding, indentation)
@@ -58,7 +58,7 @@ init.lua                  ← Entry point: loads config → util → core → co
 │   ├── autopairs/        ← Auto bracket pairing
 │   ├── align/            ← Text alignment
 │   ├── jmpword/          ← Word jump (EasyMotion-style, native)
-│   ├── kd/               ← Keybinding documentation helper
+│   ├── translation/      ← Translation engine (kd)
 │   └── task/             ← Task runner (see Task System section below)
 │
 ├── lua/theme/            ← Built-in theme engine (Base16-based, HSLuv color space)
@@ -74,22 +74,21 @@ init.lua                  ← Entry point: loads config → util → core → co
 
 **All user-facing options live in a single file: [`lua/config.lua`](lua/config.lua).**
 
-The file populates the global `nvim` table with three sections:
-
-### `nvim.keymap` — Key bindings
+### `config.keymap` — Key bindings
 
 Defines the key for every action across all modes and components. Keymap files under `lua/core/keymap/` and component files read from this table — no keybinding is hardcoded elsewhere.
 
-### `nvim.setting` — Editor settings
+### `config.setting` — Editor settings
 
 ```lua
-nvim.setting =
+setting =
 {
     editor =
     {
-        explore = 'netrw',    -- 'netrw' | 'yazi' | 'ranger' | 'superfile'
-        finder  = 'fzf',      -- 'fzf'   | 'telescope'
-        git     = 'lazygit',  -- 'lazygit' | 'gitui'
+        translator = 'kd',       -- 'kd'
+        explore    = 'netrw',    -- 'netrw' | 'yazi' | 'ranger' | 'superfile'
+        finder     = 'fzf',      -- 'fzf'   | 'telescope'
+        git        = 'lazygit',  -- 'lazygit' | 'gitui'
     },
     file =
     {
@@ -108,7 +107,7 @@ nvim.setting =
 }
 ```
 
-### `nvim.setting.appearance.theme` — Theming
+### `config.setting.appearance.theme` — Theming
 
 Built-in schemes are located in [`lua/theme/scheme/`](lua/theme/scheme/). Each scheme file exports a Base16 color palette. To add a custom scheme, place a new file in that directory and set `theme` to its name (without `.lua`).
 
@@ -261,4 +260,4 @@ On the `main` branch, Mason is used to manage server installation. Active server
 
 ## Theme
 
-Create a new file under [`lua/theme/scheme/`](lua/theme/scheme/) following the Base16 convention used by the existing schemes, then set `nvim.setting.appearance.theme` to the filename (without `.lua`) in [`lua/config.lua`](lua/config.lua).
+Create a new file under [`lua/theme/scheme/`](lua/theme/scheme/) following the Base16 convention used by the existing schemes, then set `config.setting.appearance.theme` to the filename (without `.lua`) in [`lua/config.lua`](lua/config.lua).
