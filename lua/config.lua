@@ -131,9 +131,8 @@ nvim.keymap =
         cmp_prev                 = '<A-i>',            -- Go to previous cmp item.
         cmp_next                 = '<A-k>',            -- Go to previous cmp item.
         cmp_close                = '<A-j>',            -- Close cmp diagnostic.
-        cmp_accept               = '<A-l>',            -- Confirm cmp suggestion.
-        -- cmp_open                 = '<C-Space>',        -- Open cmp diagnostic.
-        cmp_open                 = '<A-l>',        -- Open cmp diagnostic.
+        cmp_accept               = '<A-l>',            -- Confirm cmp suggestion. Can be mapped to the same key as cmp_open.
+        cmp_open                 = '<A-l>',            -- Open cmp diagnostic. Can be mapped to the same key as cmp_accept.
 
         dap_continue             = '<Leader>`',        -- Continue.
         dap_breakpoint           = '<Leader>d',        -- Toggle breakpoint.
