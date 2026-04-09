@@ -1,4 +1,4 @@
-local ex = require("comp.exex")
+local ex = require("comp.explore.exex")
 function ex.get_cmd(tempfile)
     return string.format('yazi %s --chooser-file="%s"', vim.api.nvim_buf_get_name(0), tempfile)
 end

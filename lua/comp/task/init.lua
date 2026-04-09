@@ -13,7 +13,7 @@ local function get_commands(task_name)
     local delete   = nvim.env.cli_rmf
     local filepath = vim.fn.expand('%')
     local filename = vim.fn.fnamemodify(filepath, ":t:r")
-    local projpath     = nvim.env.get_proj_root()
+    local projpath = nvim.env.get_proj_root()
     local projname = vim.fn.fnamemodify(projpath, ":t")
     local tasks    = {}
 
@@ -21,8 +21,11 @@ local function get_commands(task_name)
     local tasks_file = projpath:gsub(nvim.env.dir_sp..'$', '') .. nvim.env.dir_sp .. ".nvim" .. nvim.env.dir_sp .. "tasks.lua"
     if vim.fn.filereadable(tasks_file) == 1 then
         local config = dofile(tasks_file)
-        if config[task_name] then
-            tasks = config[task_name]
+        if config["tasks"] and config["tasks"][task_name] then
+            tasks = config["tasks"][task_name]
+        end
+        if config["root"] then
+            projpath = config["root"]
         end
     end
     -- Load from template

@@ -259,8 +259,10 @@ return
     {
         run =
         {
-            title = "Ruby",
-            cmd = [[ruby $filepath]]
+            {
+                title = "Ruby",
+                cmd = [[ruby $filepath]]
+            }
         },
         build =
         {
@@ -330,7 +332,7 @@ return
             },
             {
                 title = "ReleaseSmall",
-                cmd = [[zig build -Doptimize=ReleaseFast]]
+                cmd = [[zig build -Doptimize=ReleaseSmall]]
             }
         }
     },
@@ -371,7 +373,32 @@ return
             }
         }
     },
-    v =
+    nix =
+    {
+        run =
+        {
+            {
+                title = "Script",
+                cmd = [[nix eval --raw --file "$filepath"]]
+            },
+            {
+                title = "Project",
+                cmd = [[nix run]]
+            }
+        },
+        build =
+        {
+            {
+                title = "Project",
+                cmd = [[nix build]]
+            },
+            {
+                title = "CurrentFile",
+                cmd = [[nix-build "$filepath"]]
+            },
+        }
+    },
+    vlang =
     {
         run =
         {
@@ -552,7 +579,7 @@ return
             },
             {
                 title = "Gauche",
-                cmd = [[gauche-package build-standalone -o "$projname" "$filepath"}]]
+                cmd = [[gauche-package build-standalone -o "$projname" "$filepath"]]
             },
             {
                 title = "Bigloo",
