@@ -70,9 +70,10 @@ nvim.ext =
             return bufs
         end,
 
-        --- Get current buffer id.
+        --- Get current buffer id
+        --- @return number current buffer ID
         get_cur_buf_id = function()
-            vim.fn.bufnr()
+            return vim.fn.bufnr()
         end,
 
         --- get buffers
