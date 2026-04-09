@@ -1,9 +1,12 @@
-if nvim.setting.editor.finder == "telescope" then
-    nmap(nvim.keymap.finder.open_finder, ":Telescope<CR>")
-end
+local map = require("core.keymap.map")
 local finder = nvim.keymap.finder
 local editor = nvim.keymap.editor
 local action = require('telescope.actions')
+
+if nvim.setting.editor.finder == "telescope" then
+    map.nmap(nvim.keymap.finder.open_finder, ":Telescope<CR>")
+end
+
 return
 {
     i =

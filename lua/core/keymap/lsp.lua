@@ -1,3 +1,4 @@
+local map = require("core.keymap.map")
 local keymap = nvim.keymap.lsp
 local M = {}
 
@@ -13,14 +14,14 @@ function M.setup_lsp(bmap)
     bmap('n', keymap.goto_implementation, '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
 
     -- Setup lspsaga
-    nmap(keymap.goto_definition,  ':Lspsaga goto_definition<CR>')
-    nmap(keymap.open_code_action, ':Lspsaga code_action<CR>')
-    nmap(keymap.goto_prev_diag,   ':Lspsaga diagnostic_jump_prev<CR>')
-    nmap(keymap.goto_next_diag,   ':Lspsaga diagnostic_jump_next<CR>')
-    nmap(keymap.open_error_diag,  ':Lspsaga show_workspace_diagnostics<CR>')
-    nmap(keymap.open_hover_diag,  ':Lspsaga show_cursor_diagnostics<CR>')
-    nmap(keymap.open_hover_doc,   ':Lspsaga hover_doc<CR>')
-    nmap(keymap.goto_ref,         ':Lspsaga finder<CR>')
+    map.nmap(keymap.goto_definition,  ':Lspsaga goto_definition<CR>')
+    map.nmap(keymap.open_code_action, ':Lspsaga code_action<CR>')
+    map.nmap(keymap.goto_prev_diag,   ':Lspsaga diagnostic_jump_prev<CR>')
+    map.nmap(keymap.goto_next_diag,   ':Lspsaga diagnostic_jump_next<CR>')
+    map.nmap(keymap.open_error_diag,  ':Lspsaga show_workspace_diagnostics<CR>')
+    map.nmap(keymap.open_hover_diag,  ':Lspsaga show_cursor_diagnostics<CR>')
+    map.nmap(keymap.open_hover_doc,   ':Lspsaga hover_doc<CR>')
+    map.nmap(keymap.goto_ref,         ':Lspsaga finder<CR>')
 end
 
 --- Setup cmp mappings
@@ -48,11 +49,11 @@ end
 
 --- Setup dap mappings
 function M.setup_dap(dap)
-    nmap(keymap.dap_breakpoint,       function() dap.toggle_breakpoint() end)
-    nmap(keymap.dap_continue,         function() dap.continue() end)
-    nmap(keymap.dap_stepinto,         function() dap.step_into() end)
-    nmap(keymap.dap_stepover,         function() dap.step_over() end)
-    nmap(keymap.dap_stepout,          function() dap.step_out() end)
+    map.nmap(keymap.dap_breakpoint,       function() dap.toggle_breakpoint() end)
+    map.nmap(keymap.dap_continue,         function() dap.continue() end)
+    map.nmap(keymap.dap_stepinto,         function() dap.step_into() end)
+    map.nmap(keymap.dap_stepover,         function() dap.step_over() end)
+    map.nmap(keymap.dap_stepout,          function() dap.step_out() end)
 end
 
 return M

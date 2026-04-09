@@ -1,3 +1,4 @@
+local map = require("core.keymap.map")
 local finder = nvim.keymap.finder
 local editor = nvim.keymap.editor
 local function convert_fzf_key(key)
@@ -15,7 +16,7 @@ local function convert_fzf_key(key)
     return key
 end
 
-nmap(finder.open_finder, ":Fzf<CR>")
+map.nmap(finder.open_finder, ":Fzf<CR>")
 local keymaps = " --bind ".."ctrl-g:'jump' \\\n"
 keymaps = keymaps.." --bind "..convert_fzf_key(finder.finder_move_up)..":'up' \\\n"
 keymaps = keymaps.." --bind "..convert_fzf_key(finder.finder_move_down)..":'down' \\\n"

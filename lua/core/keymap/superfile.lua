@@ -1,7 +1,8 @@
+local map = require("core.keymap.map")
 local ex = nvim.keymap.explore
 local editor = nvim.keymap.editor
 
-nmap(ex.open_explore, ":Spf<CR>")
+map.nmap(ex.open_explore, ":Spf<CR>")
 
 -- Convert nvim key to superfile key style
 local function to_toml_key(key)
