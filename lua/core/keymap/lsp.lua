@@ -36,7 +36,7 @@ function M.setup_cmp(cmp)
         ["<Tab>"]                    = cmp.mapping.confirm({ select = true }),
     }
     if keymap.cmp_accept == keymap.cmp_open then
-        table[keymap.cmp_accept] = function()
+        maps[keymap.cmp_accept] = function()
             if cmp.visible() then
                 cmp.confirm({ select = true })
             else
