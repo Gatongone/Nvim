@@ -1,2 +1,3 @@
 local map = require("core.keymap.map")
-map.vmap(nvim.keymap.editor.translate, function() vim.cmd("Translate") end)
+local config = require("config")
+map.vmap(config.keymap.editor.translate, function() vim.cmd("Translate") end)

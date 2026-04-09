@@ -1,7 +1,10 @@
-local color = require("theme.scheme.."..nvim.setting.appearance.theme)
+local config = require("config")
+local color = require("theme.scheme.."..config.setting.appearance.theme)
 local util = require("theme.util")
+local ext = require("util.ext")
+local env = require("util.env")
 local wininfo = { winnr = -1, bufnr = -1 }
-local win = nvim.ext.win
+local win = ext.win
 local keymap = require("core.keymap.fzf")
 local exclude_dirs =
 {
@@ -77,7 +80,7 @@ end
 --- Open FZF as float window
 local function open_fzf()
     wininfo = win.create_win(true, {title = "Finder"})
-    local workspace = nvim.env.get_proj_root()
+    local workspace = env.get_proj_root()
     if workspace then
         if vim.fn.executable("fd") == 1 then
             vim.fn.jobstart("fd "..fd_exclude.. " . "..workspace.." | fzf "..previewer.."\\"..style..keymap, { term = true, on_exit = on_fzf_exit })

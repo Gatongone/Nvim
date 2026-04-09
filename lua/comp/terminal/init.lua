@@ -1,6 +1,6 @@
 require("core.keymap.terminal")
-
-local win = nvim.ext.win
+local ext = require("util.ext")
+local win = ext.win
 local ignore_bufs =
 {
     "noice",
@@ -38,7 +38,7 @@ local function open_terminal_horizontally()
     -- Create window
     vim.cmd("split")
     vim.t.h_termid = vim.api.nvim_get_current_win()
-    vim.cmd("resize "..nvim.ext.ui.get_screen_row(0.3))
+    vim.cmd("resize "..ext.ui.get_screen_row(0.3))
     vim.cmd("terminal")
     vim.cmd("startinsert")
     vim.opt_local.number = false
@@ -52,7 +52,7 @@ local function open_terminal_vertically()
     end
     vim.cmd("vsplit")
     vim.t.v_termid = vim.api.nvim_get_current_win()
-    vim.cmd("vertical resize "..nvim.ext.ui.get_screen_col(0.35))
+    vim.cmd("vertical resize "..ext.ui.get_screen_col(0.35))
     vim.cmd("terminal")
     vim.cmd("startinsert")
     vim.opt_local.number = false
@@ -67,7 +67,7 @@ local function terminal_closed_on_last()
     end
 
     -- Close the terminal when it's the last window
-    if nvim.ext.win.get_cur_wins_count() == 1 then
+    if ext.win.get_cur_wins_count() == 1 then
         if vim.bo.buftype == "terminal" then
             goto exit
         else

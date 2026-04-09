@@ -1,6 +1,7 @@
-local M              = {}
-local util           = require("theme.util")
-local none           = "NONE"
+local M      = {}
+local util   = require("theme.util")
+local none   = "NONE"
+local config = require("config")
 
 local default_config =
 {
@@ -15,7 +16,7 @@ local default_config =
     color_overrides      = {},
     telescope_theme      = false,
     use_original_palette = false,
-    transparent_bg       = nvim.setting.appearance.transparent_background
+    transparent_bg       = config.setting.appearance.transparent_background
 }
 
 local function get_gitdiff_scheme(scheme)

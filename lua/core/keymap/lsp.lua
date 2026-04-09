@@ -1,4 +1,5 @@
-local keymap = nvim.keymap.lsp
+local config = require("config")
+local keymap = config.keymap.lsp
 local map = require("core.keymap.map")
 
 vim.api.nvim_create_autocmd('LspAttach',

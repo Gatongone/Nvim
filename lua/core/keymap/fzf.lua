@@ -1,6 +1,7 @@
 local map = require("core.keymap.map")
-local finder = nvim.keymap.finder
-local editor = nvim.keymap.editor
+local config = require("config")
+local finder = config.keymap.finder
+local editor = config.keymap.editor
 local function convert_fzf_key(key)
     if key:sub(1,3) == "<A-" then
         return "alt-"..key:sub(4,4)

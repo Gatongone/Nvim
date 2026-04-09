@@ -1,5 +1,6 @@
+local config = require("config")
 local map = require("core.keymap.map")
-local win = nvim.keymap.win
+local win = config.keymap.win
 
 map.nmap(win.resize_vwin_bigger,  ":vertical resize +1<CR>")
 map.nmap(win.resize_vwin_smaller, ":vertical resize -1<CR>")

@@ -1,5 +1,7 @@
 require("core.keymap.netrw")
 local ui = require("comp.explore.netrw.ui")
+local env = require("util.env")
+local ext = require("util.ext")
 local ignore_bufs =
 {
     "noice",
@@ -190,6 +192,7 @@ local can_curline_collapse = function()
     return next_pipes == current_pipes + 1
 end
 
+
 --- Gets the full path to the line item where the netrw cursor is currently located
 --- @return string curline_path Currentline path
 local get_curline_path = function()
@@ -199,8 +202,8 @@ local get_curline_path = function()
     [[
         let b:netrw_curfile_name = netrw#Call('NetrwGetWord')
         let b:netrw_curdir_path  = netrw#Call('NetrwTreePath', exists("w:netrw_treetop") ? w:netrw_treetop : b:netrw_curdir )
-        let b:netrw_curfile_path = netrw#Call('ComposePath', b:netrw_curdir_path, b:netrw_curfile_name)
     ]]
+    vim.fn["netrw#fs#ComposePath"](vim.b.netrw_curdir_path, vim.b.netrw_curfile_name)
 
     if vim.b.netrw_curfile_name:sub(-1) == "/" and not can_curline_collapse() then
         path = vim.b.netrw_curdir_path
@@ -227,13 +230,13 @@ local netrw_paste_files = function()
 
     -- Copy files to current directory
     if #netrw.copied ~= 0 then
-        vim.fn.execute("silent !" .. nvim.env.cli_cpd .. " " .. copy_list .. " "  .. vim.b.netrw_curdir)
+        vim.fn.execute("silent !" .. env.cli_cpd .. " " .. copy_list .. " "  .. vim.b.netrw_curdir)
         unmark_all = true
     end
 
     -- Cut files to current directory
     if #netrw.cut ~= 0 then
-        vim.fn.execute("silent !" .. nvim.env.cli_mv .. " " .. cut_list .. " "  .. vim.b.netrw_curdir)
+        vim.fn.execute("silent !" .. env.cli_mv .. " " .. cut_list .. " "  .. vim.b.netrw_curdir)
         unmark_all = true
     end
 
@@ -258,14 +261,14 @@ end
 --- Create file
 local netrw_create_file = function()
     local name = vim.fn.input("Please enter name: ")
-    vim.fn.execute("silent !" .. nvim.env.cli_nf .. " " .. vim.b.netrw_curdir .. "/" .. name)
+    vim.fn.execute("silent !" .. env.cli_nf .. " " .. vim.b.netrw_curdir .. "/" .. name)
     vim.fn.execute("redraw!")
 end
 
 --- Create directory
 local netrw_create_directory = function()
     local name = vim.fn.input("Please enter name: ")
-    vim.fn.execute("silent !" .. nvim.env.cli_nd .. " "  .. vim.b.netrw_curdir .. "/" .. name)
+    vim.fn.execute("silent !" .. env.cli_nd .. " "  .. vim.b.netrw_curdir .. "/" .. name)
     vim.fn.execute("redraw!")
 end
 
@@ -274,9 +277,9 @@ local netrw_rename = function()
     local curpath = get_curline_path()
     local name = vim.fn.input("Please enter name: ")
     local destpath = vim.fn.isdirectory(curpath) == 1
-    and vim.fn.fnamemodify(curpath, ":p:h:h")..nvim.env.dir_sp..name
-    or vim.fn.fnamemodify(curpath, ":p:h")..nvim.env.dir_sp..name
-    vim.fn.execute("silent !"..nvim.env.cli_mv.." "..curpath.." "..destpath)
+    and vim.fn.fnamemodify(curpath, ":p:h:h")..env.dir_sp..name
+    or vim.fn.fnamemodify(curpath, ":p:h")..env.dir_sp..name
+    vim.fn.execute("silent !"..env.cli_mv.." "..curpath.." "..destpath)
     vim.fn.execute("redraw!")
 end
 
@@ -298,7 +301,7 @@ local netrw_remove_recursively = function()
     print("Try removing:\n"..table.concat(marked_files, "\n"))
     vim.ui.select({"YES", "NO"}, { prompt = "Are you sure remove these files?" }, function(choice)
         if choice == "YES" then
-            vim.fn.execute("silent !" .. nvim.env.cli_rmd .. " " .. params)
+            vim.fn.execute("silent !" .. env.cli_rmd .. " " .. params)
             netrw:clear_marked_list()
         end
     end)
@@ -363,7 +366,7 @@ local netrw_on_enter = function()
     end
 
     -- Close the netrw when it's the last window
-    if nvim.ext.win.get_cur_wins_count() == 1 then
+    if ext.win.get_cur_wins_count() == 1 then
         goto exit
     end
 
