@@ -93,8 +93,8 @@ setting =
     file =
     {
         encoding    = 'utf-8',
-        tab_intent  = false,   -- true for tabs, false for spaces
-        intent_num  = 4,
+        tab_indent  = false,   -- true for tabs, false for spaces
+        indent_num  = 4,
     },
     appearance =
     {

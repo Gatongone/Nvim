@@ -1,4 +1,4 @@
-return
+local config =
 {
     --- Keymap
     keymap =
@@ -156,8 +156,8 @@ return
         file =
         {
             encoding                 = 'utf-8',            -- File default encoding.
-            tab_intent               = false,              -- 'True' for tab intent, and 'False' for whitespace intent.
-            intent_num               = 4,                  -- Intent number.
+            tab_indent               = false,              -- 'True' for tab indent, and 'False' for whitespace indent.
+            indent_num               = 4,                  -- Indent number.
         },
         appearance =
         {
@@ -170,3 +170,4 @@ return
         },
     }
 }
+return config
