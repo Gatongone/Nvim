@@ -444,7 +444,6 @@ local function setup_scheme(theme_name, opts)
         Pmenu                               = { fg = scheme.base05, bg = none },
         PmenuSel                            = { fg = scheme.base05, bg = scheme.base08, style = "bold" },
         PmenuSbar                           = { bg = none },
-        PmenuThumb                          = { bg = scheme.base08 },
         PmenuThumb                          = { fg = none, bg = scheme.base05 },
         EasyMotionShade                     = { fg = none },
         Visual                              = { bg = scheme.base02 },

@@ -96,7 +96,7 @@ return
     {
         "mason-org/mason-lspconfig.nvim",
         config = function()
-            local confs    = require("mason-lspconfig")
+            local confs = require("mason-lspconfig")
 
             for server, config in pairs(lsps) do
                 vim.lsp.config(server, config)
