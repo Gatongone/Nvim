@@ -268,4 +268,3 @@ end
 
 -- Append user command
 vim.api.nvim_create_user_command("JumpWord", cache.jump, {})
-nmap(nvim.keymap.editor.goto, ":JumpWord<CR>")

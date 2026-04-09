@@ -1,7 +1,8 @@
+local map = require("core.keymap.map")
 local ex = nvim.keymap.explore
 local editor = nvim.keymap.editor
 
-nmap(ex.open_explore, ":Ranger<CR>")
+map.nmap(ex.open_explore, ":Ranger<CR>")
 
 -- Convert nvim key to ranger key style
 local function to_conf_key(key)
