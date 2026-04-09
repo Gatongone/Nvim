@@ -91,6 +91,13 @@ local M =
             return bufs
         end,
 
+        --- Get tab name by buffer id
+        --- @param id number Buffer hid, 0 for current tab
+        --- @return string bufname Buffer name
+        get_buf_name = function(id)
+            return vim.api.nvim_buf_get_name(id)
+        end,
+
         --- Get current buffer id
         --- @return number current buffer ID
         get_cur_buf_id = function()
@@ -110,13 +117,6 @@ local M =
         --- @return number count Number of tabs
         get_tabs_count = function()
             return vim.fn.tabpagenr('$')
-        end,
-
-        --- Get  name by tab handle
-        --- @param id number Tab handle, 0 for current tab
-        --- @return string tabname Tab name
-        get_tab_name = function(id)
-            return vim.api.nvim_buf_get_name(id)
         end,
 
         --- Get tab id by tab name

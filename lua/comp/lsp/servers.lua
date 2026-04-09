@@ -167,7 +167,7 @@ return
     },
     scheme_ls =
     {
-        cmd = { '$scheme' }, -- Or path/to/your/scheme_lsp
+        cmd = { vim.fn.expand('$scheme') }, -- Or path/to/your/scheme_lsp
         filetypes = { 'scheme', 'scm', 'ss', 'sls', 'scheme.guile' },
         root_markers = { '.git', '.nvim' },
         single_file_support = true,

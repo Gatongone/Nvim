@@ -127,7 +127,7 @@ local function run_with_redirect(target_buf, callback)
     fenv["print"] = function(...)
         append_to_end(target_buf, nil, ...)
     end
-    setfenv(callback, env)
+    setfenv(callback, fenv)
 
     -- Try invoke
     local start = vim.uv.hrtime()
@@ -189,7 +189,7 @@ local function exec_cmd_v(cmd)
     if type(cmd) == "function" then
         vim.t.v_runid = vim.api.nvim_get_current_win()
         run_with_redirect(vim.fn.bufnr(), cmd)
-        vim.t.f_runid = -1
+        vim.t.v_runid = -1
     else
         vim.fn.jobstart(cmd, { term = true, on_exit = function() vim.t.v_runid = -1 end })
         vim.cmd("vertical resize " .. ext.ui.get_screen_col(0.35))
