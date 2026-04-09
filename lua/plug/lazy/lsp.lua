@@ -109,6 +109,14 @@ return
                     additional_vim_regex_highlighting = false,
                 },
             })
+            -- There are problems with markdown treesitter.
+            vim.api.nvim_create_autocmd("FileType",
+            {
+                pattern = "markdown",
+                callback = function()
+                    vim.treesitter.stop()
+                end,
+            })
             require("mason").setup(
             {
                 ui =
