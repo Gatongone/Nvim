@@ -1,5 +1,5 @@
 require("core.keymap.netrw")
-local ui = require("comp.netrw.ui")
+local ui = require("comp.explore.netrw.ui")
 local ignore_bufs =
 {
     "noice",

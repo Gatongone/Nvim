@@ -1,4 +1,5 @@
-nvim = { }
+-- Global APIs
+_G.nvim = { }
 
 require("config")
 require("util")

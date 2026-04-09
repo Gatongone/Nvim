@@ -1,11 +1,41 @@
 local capabilities = vim.lsp.protocol.make_client_capabilities()
+vim.filetype.add(
+{
+    extension =
+    {
+        v = function(path, bufnr)
+            if vim.fs.root(path, { 'v.mod' }) then
+                return 'vlang'
+            end
+            if vim.fs.root(path, { '_CoqProject' }) then
+                return 'coq'
+            end
+            -- Fallback to content check.
+            local first_lines = vim.api.nvim_buf_get_lines(bufnr, 0, 5, false)
+            for _, line in ipairs(first_lines) do
+                if line:match('^%s*Require') or line:match('^%s*Definition')
+                   or line:match('^%s*Theorem') or line:match('^%s*Lemma') then
+                    return 'coq'
+                end
+            end
+            return 'vlang'
+        end,
+        mbtx = "moonbit",
+        mbt = "moonbit"
+    },
+    filename =
+    {
+        ['moon.pkg'] = 'moonbit',
+    },
+})
 return
 {
     vls =
     {
         cmd = { 'vls' },
-        filetypes = { 'v' },
+        filetypes = { 'vlang' },
         root_markers = { 'v.mod', '.git' },
+        single_file_support = true,
         settings =
         {
             v = { fmt = true },
@@ -16,6 +46,7 @@ return
         cmd = { 'pylsp' },
         filetypes = { 'python' },
         root_markers = { '.git', 'pyproject.toml', 'setup.py', 'requirements.txt', "Pipfile" },
+        single_file_support = true,
         init_options =
         {
             configurationSources = { 'pycodestyle' },
@@ -33,6 +64,7 @@ return
         cmd = { 'lua-language-server' },
         filetypes = { 'lua' },
         root_markers = { '.luarc.json', '.luarc.jsonc', '.stylua.toml', 'stylua.toml', '.git' },
+        single_file_support = true,
         settings =
         {
             Lua =
@@ -58,6 +90,7 @@ return
             '-j=4'
         },
         filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
+        single_file_support = true,
         root_markers =
         {
             '.git',
@@ -86,6 +119,7 @@ return
     {
         cmd = { 'csharp-ls' },
         filetypes = { 'cs' },
+        single_file_support = true,
         root_markers =
         {
             '*.slnx',
@@ -113,6 +147,7 @@ return
         cmd = { 'ocamllsp' },
         filetypes = { 'ocaml', 'ocamlinterface', 'menhir', 'dune', 'reason' },
         root_markers = { 'dune-project', '*.opam', 'esy.json', '.git', 'dune-workspace' },
+        single_file_support = true,
         settings =
         {
             ocamllsp =
@@ -132,16 +167,18 @@ return
     },
     scheme_ls =
     {
-        cmd = { 'steel-language-server' },
-        filetypes = { 'scheme', 'scm', 'ss', 'sls' },
-        root_markers = { '.git' },
-        single_file_support = true
+        cmd = { '/home/gatongone/.lsp/guile-language-server/wrapper' }, -- path/to/your/scheme_lsp
+        filetypes = { 'scheme', 'scm', 'ss', 'sls', 'scheme.guile' },
+        root_markers = { '.git', '.nvim' },
+        single_file_support = true,
+
     },
     ts_ls =
     {
         cmd = { 'typescript-language-server', '--stdio' },
         filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
         root_markers = { '.git', 'package.json', 'tsconfig.json', 'jsconfig.json' },
+        single_file_support = true,
         init_options =
         {
             hostInfo = 'neovim'
@@ -230,6 +267,7 @@ return
         filetypes = { 'odin' },
         root_markers = { 'ols.json', '.git' },
         capabilities = vim.lsp.protocol.make_client_capabilities(),
+        single_file_support = true,
         init_options =
         {
             enable_format = true,
@@ -244,13 +282,16 @@ return
     {
         cmd = { 'zls' },
         filetypes = { 'zig' },
-        root_markers = { 'build.zig', '.git' }
+        single_file_support = true,
+        root_markers = { 'build.zig', '.git' },
+        capabilities = capabilities
     },
     moonbit =
     {
         cmd = { 'moon', 'lsp' },
         filetypes = { 'moonbit' },
         root_markers = { 'moon.mod.json', 'moon.pkg.json', '.git' },
+        single_file_support = true,
         capabilities = capabilities
     },
     nixd =
@@ -258,6 +299,7 @@ return
         cmd = { 'nixd' },
         filetypes = { 'nix' },
         root_markers = { '.git', 'flake.nix', 'shell.nix', 'default.nix' },
+        single_file_support = true,
         settings =
         {
             nixd =
@@ -274,7 +316,7 @@ return
                 {
                     nixos =
                     {
-                        expr = "(builtins.getFlake \"/path/to/your/flake\").nixosConfigurations.<hostname>.options"
+                        expr = "(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.".. vim.uv.os_gethostname() ..".options"
                     }
                 }
             }
@@ -338,6 +380,7 @@ return
     bashls =
     {
         cmd = { 'bash-language-server', 'start' },
+        single_file_support = true,
         filetypes = { 'bash', 'sh' }
     },
     marksman =
@@ -353,6 +396,7 @@ return
         cmd = { 'vscode-html-language-server', '--stdio' },
         filetypes = { 'html' },
         root_markers = { '.git', 'package.json', 'index.html' },
+        single_file_support = true,
         settings =
         {
             html =

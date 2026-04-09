@@ -1,4 +1,4 @@
-local ex = require("comp.exex")
+local ex = require("comp.explore.exex")
 function ex.get_cmd(tempfile)
     return string.format('ranger --choosefile=%s', tempfile)
 end

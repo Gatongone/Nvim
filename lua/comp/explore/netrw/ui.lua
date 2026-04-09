@@ -1,5 +1,5 @@
 local M = {}
-local parse     = require("comp.netrw.parser")
+local parse     = require("comp.explore.netrw.parser")
 local kind_icon = require("theme.icon").kind
 
 local get_icon = function(node)
