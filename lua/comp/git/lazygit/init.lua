@@ -1,4 +1,4 @@
-local win = nvim.ext.win
+local win = require("util.ext").win
 
 local function open_lazygit()
     win.create_win(true, {title = "Git"})

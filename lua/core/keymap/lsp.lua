@@ -1,5 +1,6 @@
 local map = require("core.keymap.map")
-local keymap = nvim.keymap.lsp
+local config = require("config")
+local keymap = config.keymap.lsp
 local M = {}
 
 --- Setup when lsp client was appended

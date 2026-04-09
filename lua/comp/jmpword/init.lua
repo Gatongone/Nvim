@@ -1,4 +1,5 @@
-local label_chars = string.toarray("abcdefghijklmnobqrstuvwxyz")
+local ext = require("util.ext")
+local label_chars = ext.string.toarray("abcdefghijklmnobqrstuvwxyz")
 local ns_id = vim.api.nvim_create_namespace('JumpWord')
 local hl_group =
 {
@@ -97,7 +98,7 @@ function cache.try_process_char(char, included_chars)
         return true
     end
 
-    local is_label = table.contains(included_chars, char)
+    local is_label = ext.table.contains(included_chars, char)
 
     -- Check if character can be label
     if is_label then

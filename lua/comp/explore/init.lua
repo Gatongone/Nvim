@@ -1,4 +1,5 @@
-local explore = nvim.setting.editor.explore
+local config = require("config")
+local explore = config.setting.editor.explore
 local succeed = false
 
 if explore == "yazi" and vim.fn.executable("yazi") then

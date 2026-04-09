@@ -1,5 +1,6 @@
 local map = require("core.keymap.map")
-local tab = nvim.keymap.tab
+local config = require("config")
+local tab = config.keymap.tab
 
 map.nmap(tab.prev_tab,      ':-tabnext<CR>')
 map.nmap(tab.next_tab,      ':+tabnext<CR>')

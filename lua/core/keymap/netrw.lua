@@ -1,6 +1,7 @@
 local map = require("core.keymap.map")
-local explore = nvim.keymap.explore
-local win  = nvim.keymap.win
+local config = require("config")
+local explore = config.keymap.explore
+local win  = config.keymap.win
 
 -- Keymappings
 map.nmap(explore.open_explore, ":NetrwOpenFileTree<CR>")

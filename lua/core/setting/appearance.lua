@@ -1,4 +1,5 @@
-local appearance = nvim.setting.appearance
+local config = require("config")
+local appearance = config.setting.appearance
 
 -- Theme
 vim.o.background = "dark"

@@ -4,9 +4,10 @@ local M =
     custom_keymaps = "",
     keymap_path    = "",
     use_vim_map    = true,
-    get_cmd        = function(tempfile) end
+    get_cmd        = function(tempfile) return "" end
 }
-local win = nvim.ext.win
+local ext = require("util.ext")
+local win = ext.win
 local uv  = vim.loop
 local ex  =
 {

@@ -14,10 +14,31 @@ local default_win_opts =
     noautocmd = false,
 }
 
-local appearance = nvim.setting.appearance
+--- Get window properties that expand with default config
+--- @param opts table|nil See https://neovim.io/doc/user/api.html#nvim_open_win()
+--- @return table opts Options that expand with default config
+local get_win_config = function(opts)
+    opts = opts or {}
+    local ui = vim.api.nvim_list_uis()[1]
+    if opts.width and opts.width < 1 then
+        opts.width = math.floor(ui.width * opts.width)
+    end
+    if opts.height and opts.height < 1 then
+        opts.height = math.floor(ui.height * opts.height)
+    end
+    opts.width = opts.width or math.min(ui.width - 10, math.floor(ui.width / 1.5))
+    opts.height = opts.height or math.min(ui.height - 10, math.floor(ui.height / 1.3))
+    opts.row = opts.row or math.floor((ui.height - opts.height) / 2.5)
+    opts.col = opts.col or math.floor((ui.width - opts.width) / 2)
+    opts = vim.tbl_extend("force", default_win_opts, opts)
+    if type(opts.title) == 'string' and opts.title ~= ''  then
+        opts.title = " "..opts.title.." "
+    end
+    return opts
+end
 
 --- Extensions for neovim
-nvim.ext =
+local M =
 {
     --- UI APIS
     ui =
@@ -156,7 +177,7 @@ nvim.ext =
         create_win = function(enter, opts)
             local win         = {}
             local focus       = enter == nil or enter == true
-            local useropts = nvim.ext.win.get_win_config(opts)
+            local useropts = get_win_config(opts)
             win.title = useropts.title
             win.bufnr = vim.api.nvim_create_buf(false, false)
             win.winnr = vim.api.nvim_open_win(win.bufnr, focus, useropts)
@@ -166,169 +187,133 @@ nvim.ext =
         --- Get window properties that expand with default config
         --- @param opts table|nil See https://neovim.io/doc/user/api.html#nvim_open_win()
         --- @return table opts Options that expand with default config
-        get_win_config = function(opts)
-            opts = opts or {}
-            local ui = vim.api.nvim_list_uis()[1]
-            if opts.width and opts.width < 1 then
-                opts.width = math.floor(ui.width * opts.width)
+        get_win_config = get_win_config
+    },
+
+    --- Table APIs.
+    table =
+    {
+        --- Check if element contains in table
+        --- @param src table
+        --- @param element any
+        --- @return boolean contains
+        contains = function(src, element)
+            for _, value in pairs(src) do
+                if element == value then
+                    return true
+                end
             end
-            if opts.height and opts.height < 1 then
-                opts.height = math.floor(ui.height * opts.height)
+            return false
+        end,
+
+        --- Gets the total number of elements in the table
+        --- @param src any A table which to get length
+        --- @return number length The total number of elements in the table
+        length = function(src)
+            if not src then
+                return 0
             end
-            opts.width = opts.width or math.min(ui.width - 10, math.floor(ui.width / 1.5))
-            opts.height = opts.height or math.min(ui.height - 10, math.floor(ui.height / 1.3))
-            opts.row = opts.row or math.floor((ui.height - opts.height) / 2.5)
-            opts.col = opts.col or math.floor((ui.width - opts.width) / 2)
-            opts = vim.tbl_extend("force", default_win_opts, opts)
-            if type(opts.title) == 'string' and opts.title ~= ''  then
-                opts.title = " "..opts.title.." "
+            local count = 0
+            for _ in pairs(src) do
+                count = count + 1
             end
-            return opts
+            return count
+        end,
+
+        --- Gets the value at the specified position in the paris(table)
+        --- @param src any A table which to get value
+        --- @param index any The position of the table element to get
+        --- @return any | nil element The value at the specified position in paris(table)
+        index = function(src, index)
+            local count = 0
+            for _ , value in pairs(src) do
+                count = count + 1
+                if count == index then
+                    return value
+                end
+            end
+            return nil
+        end,
+
+        --- Projects each element of a sequence into a new form
+        --- @param src table A table to invoke a transform function on
+        --- @param selector function A transform function(key, value) to apply to each element
+        --- @return table
+        select = function(src, selector)
+            local result = {}
+            for key, value in pairs(src) do
+                table.insert(result, selector(key, value))
+            end
+            return result
+        end,
+
+        --- Filters a sequence of values based on a predicate
+        --- @param src table A table to filter
+        --- @param predicate function A function(key, value) to test each element for a condition
+        --- @return table A table that contains elements from the input sequence that satisfy the condition
+        where = function(src, predicate)
+            local result = {}
+            for key, value in pairs(src) do
+                if predicate(key, value) then
+                    table.insert(result, value)
+                end
+            end
+            return result
+        end
+    },
+
+    --- String APIs.
+    string =
+    {
+        --- Convert string to array
+        --- @param str string
+        --- @return table array
+        toarray = function(str)
+            local result = {}
+            for i = 1, #str do
+                result[i] = string.sub(str, i, i)
+            end
+            return result
+        end,
+
+        --- Replace string with pattern
+        --- @param str string
+        --- @return string result
+        replace = function(str, patterns)
+            return (str:gsub("%$([%a_][%w_]*)", function(key)
+                return patterns[key] or ("$"..key)
+            end))
+        end,
+
+        --- Searches for the specified object and returns the value whose key first match in a cases table.
+        --- Use '_' for default cases.
+        ---
+        --- Example:
+        ---
+        --- ```lua
+        --- local match = "A"
+        --- string.switch(match,
+        --- {
+        ---     A  = "This is A",
+        ---     B  = "This is B",
+        ---     _  = "Default value"
+        --- })
+        --- print(match) -- => This is A
+        --- ```
+        --- @param str string The string to match against the keys of the cases table
+        --- @param cases table A table where keys are strings to compare with `str` and values are the corresponding results
+        --- @return any matched The value associated with the matching key, or the value of "@others" if present, otherwise nil
+        switch = function(str, cases)
+            local others = nil
+            for key, value in pairs(cases) do
+                if str == key then
+                    return value
+                elseif key == "_" then
+                    others = value
+                end
+            end
+            return others
         end
     }
 }
-
---- Check if element contains in table
---- @param src table
---- @param element any
---- @return boolean contains
-table.contains = function(src, element)
-    for _, value in pairs(src) do
-        if element == value then
-            return true
-        end
-    end
-    return false
-end
-
---- Gets the total number of elements in the table
---- @param src any A table which to get length
---- @return number length The total number of elements in the table
-table.length = function(src)
-    if not src then
-        return 0
-    end
-    local count = 0
-    for _ in pairs(src) do
-        count = count + 1
-    end
-    return count
-end
-
---- Gets the value at the specified position in the paris(table)
---- @param src any A table which to get value
---- @param index any The position of the table element to get
---- @return any | nil element The value at the specified position in paris(table)
-table.index = function(src, index)
-    local count = 0
-    for _ , value in pairs(src) do
-        count = count + 1
-        if count == index then
-            return value
-        end
-    end
-    return nil
-end
-
---- Projects each element of a sequence into a new form
---- @param src table A table to invoke a transform function on
---- @param selector function A transform function(key, value) to apply to each element
---- @return table
-table.select = function(src, selector)
-    local result = {}
-    for key, value in pairs(src) do
-        table.insert(result, selector(key, value))
-    end
-    return result
-end
-
---- Filters a sequence of values based on a predicate
---- @param src table A table to filter
---- @param predicate function A function(key, value) to test each element for a condition
---- @return table A table that contains elements from the input sequence that satisfy the condition
-table.where = function(src, predicate)
-    local result = {}
-    for key, value in pairs(src) do
-        if predicate(key, value) then
-            table.insert(result, value)
-        end
-    end
-    return result
-end
-
---- Convert string to array
---- @param str string
---- @return table array
-string.toarray = function(str)
-    local result = {}
-    for i = 1, #str do
-        result[i] = string.sub(str, i, i)
-    end
-    return result
-end
-
---- Replace string with pattern
---- @param str string
---- @return string result
-string.replace = function(str, patterns)
-    return (str:gsub("%$([%a_][%w_]*)", function(key)
-        return patterns[key] or ("$"..key)
-    end))
-end
-
---- Searches for the specified object and returns the value whose key first match in a cases table.
---- Use '_' for default cases.
----
---- Example:
----
---- ```lua
---- local match = "A"
---- string.switch(match,
---- {
----     A  = "This is A",
----     B  = "This is B",
----     _  = "Default value"
---- })
---- print(match) -- => This is A
---- ```
---- @param str string The string to match against the keys of the cases table
---- @param cases table A table where keys are strings to compare with `str` and values are the corresponding results
---- @return any matched The value associated with the matching key, or the value of "@others" if present, otherwise nil
-string.switch = function(str, cases)
-    local others = nil
-    for key, value in pairs(cases) do
-        if str == key then
-            return value
-        elseif key == "_" then
-            others = value
-        end
-    end
-    return others
-end
-
--- Make sure setfenv/getfenv valid
-if not setfenv then
-    local function findenv(f)
-        local level = 1
-        repeat
-            local name, value = debug.getupvalue(f, level)
-            if name == "_ENV" then
-                return level, value
-            end
-            level = level + 1
-        until name == nil
-        return nil
-    end
-    ---Version: >= Lua5.2
-    getfenv = function(f)
-        return (select(2, findenv(f)) or _G)
-    end
-    ---Version: >= Lua5.2
-    setfenv = function(f, t)
-        local level = findenv(f)
-        if level then
-            debug.setupvalue(f, level, t)
-        end
-        return f
-    end
-end
+return M

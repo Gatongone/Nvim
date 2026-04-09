@@ -1,5 +1,5 @@
-local win = nvim.ext.win
-local eidtor_key = nvim.keymap.editor
+local win = require("util.ext").win
+local eidtor_key = require("config").keymap.editor
 
 local function get_visual_selection()
     -- Check whether using visual mode

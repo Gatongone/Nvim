@@ -1,4 +1,4 @@
-local file = nvim.setting.file
+local file = require("config").setting.file
 
 -- Intent
 vim.o.tabstop      = file.intent_num

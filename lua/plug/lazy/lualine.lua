@@ -1,4 +1,4 @@
-local succeed, scheme = pcall(require, "theme.scheme." .. nvim.setting.appearance.theme)
+local succeed, scheme = pcall(require, "theme.scheme." .. require("config").setting.appearance.theme)
 local icon            = require("theme.icon")
 local filetype        = { "filetype", icon_only = true }
 local theme           = "auto"

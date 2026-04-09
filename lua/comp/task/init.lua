@@ -1,4 +1,7 @@
-local win = nvim.ext.win
+local ext = require("util.ext")
+local env = require("util.env")
+local map = require("core.keymap.map")
+local win = ext.win
 
 vim.t.f_runid = -1
 vim.t.h_runid = -1
@@ -10,15 +13,15 @@ vim.t.v_runid = -1
 local function get_commands(task_name)
     local filetype = vim.bo.filetype
     local cmds     = {}
-    local delete   = nvim.env.cli_rmf
+    local delete   = env.cli_rmf
     local filepath = vim.fn.expand('%')
     local filename = vim.fn.fnamemodify(filepath, ":t:r")
-    local projpath = nvim.env.get_proj_root()
+    local projpath = env.get_proj_root()
     local projname = vim.fn.fnamemodify(projpath, ":t")
     local tasks    = {}
 
     -- Load from .nvim
-    local tasks_file = projpath:gsub(nvim.env.dir_sp..'$', '') .. nvim.env.dir_sp .. ".nvim" .. nvim.env.dir_sp .. "tasks.lua"
+    local tasks_file = projpath:gsub(env.dir_sp..'$', '') .. env.dir_sp .. ".nvim" .. env.dir_sp .. "tasks.lua"
     if vim.fn.filereadable(tasks_file) == 1 then
         local config = dofile(tasks_file)
         if config["tasks"] and config["tasks"][task_name] then
@@ -29,7 +32,7 @@ local function get_commands(task_name)
         end
     end
     -- Load from template
-    if table.length(tasks) == 0 then
+    if ext.table.length(tasks) == 0 then
         local template = require("comp.task.template")
         local lang     = template[filetype]
         if not lang then
@@ -62,14 +65,14 @@ local function get_commands(task_name)
             cmd = cmd .. [[cd "$projpath" ; ]]
         end
 
-        cmd = string.replace(cmd,
+        cmd = ext.string.replace(cmd,
         {
             delete      = delete,
             filepath    = filepath,
             filename    = filename,
             projname    = projname,
             projpath    = projpath,
-        }):gsub("/", nvim.env.dir_sp):gsub(";", nvim.env.cli_sp)
+        }):gsub("/", env.dir_sp):gsub(";", env.cli_sp)
 
         cmds[task.title] = cmd
         ::continue::
@@ -118,10 +121,10 @@ end
 --- @param callback function The function that invoke in the buffer
 local function run_with_redirect(target_buf, callback)
     -- Overwrite print
-    local env = {}
+    local fenv = {}
     -- Redirect others to Global env
-    setmetatable(env, {__index = _G})
-    env["print"] = function(...)
+    setmetatable(fenv, {__index = _G})
+    fenv["print"] = function(...)
         append_to_end(target_buf, nil, ...)
     end
     setfenv(callback, env)
@@ -144,7 +147,7 @@ local function exec_cmd_f(cmd)
         vim.api.nvim_set_current_win(vim.t.f_termid)
     end
     if type(cmd) == "function" then
-        local winids = nvim.ext.win.create_win(true, {title = "Task"})
+        local winids = ext.win.create_win(true, {title = "Task"})
         vim.t.f_runid = winids.winnr
         run_with_redirect(winids.bufnr, cmd)
         vim.t.f_runid = -1
@@ -152,7 +155,7 @@ local function exec_cmd_f(cmd)
         vim.t.f_runid = win.create_win(true, { title = "Task" }).winnr
         vim.fn.jobstart(cmd, { term = true, on_exit = function() vim.t.f_runid = -1 end })
     end
-    bnmap("q", ":q!<CR>")
+    map.bnmap("q", ":q!<CR>")
 end
 
 --- Execute command on horizontal window
@@ -169,10 +172,10 @@ local function exec_cmd_h(cmd)
         vim.t.h_runid = -1
     else
         vim.fn.jobstart(cmd, { term = true, on_exit = function() vim.t.v_runid = -1 end })
-        vim.cmd("resize " .. nvim.ext.ui.get_screen_row(0.3))
+        vim.cmd("resize " .. ext.ui.get_screen_row(0.3))
         vim.t.h_runid = vim.api.nvim_get_current_win()
     end
-    bnmap("<C-q>", ":q!<CR>")
+    map.bnmap("<C-q>", ":q!<CR>")
 end
 
 --- Execute command on vertical window
@@ -189,10 +192,10 @@ local function exec_cmd_v(cmd)
         vim.t.f_runid = -1
     else
         vim.fn.jobstart(cmd, { term = true, on_exit = function() vim.t.v_runid = -1 end })
-        vim.cmd("vertical resize " .. nvim.ext.ui.get_screen_col(0.35))
+        vim.cmd("vertical resize " .. ext.ui.get_screen_col(0.35))
         vim.t.v_runid = vim.api.nvim_get_current_win()
     end
-    bnmap("<C-q>", ":q!<CR>")
+    map.bnmap("<C-q>", ":q!<CR>")
 end
 
 --- Run codes.
@@ -200,14 +203,14 @@ end
 --- @param exec function Execution function
 local function run_task(task_name, exec)
     local cmds = get_commands(task_name)
-    local cmds_count = table.length(cmds)
+    local cmds_count = ext.table.length(cmds)
     if cmds_count == 0 then
         vim.notify("Missing" .. task_name .. " task for '" .. vim.bo.filetype .. "'.", vim.log.levels.ERROR)
     elseif cmds_count == 1 then
-        exec(table.index(cmds, 1))
+        exec(ext.table.index(cmds, 1))
     else
         vim.ui.select(
-            table.select(cmds, function(key, value)
+            ext.table.select(cmds, function(key, value)
                 return key
             end),
             {
@@ -228,7 +231,7 @@ vim.api.nvim_create_user_command("Run", function(opts)
         wintype = opts.fargs[1]
     end
 
-    local exec = string.switch(wintype,
+    local exec = ext.string.switch(wintype,
     {
         f     = exec_cmd_f,
         h     = exec_cmd_h,
@@ -251,7 +254,7 @@ vim.api.nvim_create_user_command("Build", function(opts)
         wintype = opts.fargs[1]
     end
 
-    local exec = string.switch(wintype,
+    local exec = ext.string.switch(wintype,
     {
         f     = exec_cmd_f,
         h     = exec_cmd_h,
@@ -275,7 +278,7 @@ vim.api.nvim_create_user_command("Task", function(opts)
         wintype = opts.fargs[2]
     end
 
-    local exec = string.switch(wintype,
+    local exec = ext.string.switch(wintype,
     {
         f     = exec_cmd_f,
         h     = exec_cmd_h,

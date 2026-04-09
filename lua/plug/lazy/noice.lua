@@ -1,4 +1,4 @@
-local colors = require("theme.scheme." .. nvim.setting.appearance.theme)
+local colors = require("theme.scheme." .. require("config").setting.appearance.theme)
 
 local lsp_opts =
 {

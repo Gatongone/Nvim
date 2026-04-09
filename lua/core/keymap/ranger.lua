@@ -1,6 +1,7 @@
 local map = require("core.keymap.map")
-local ex = nvim.keymap.explore
-local editor = nvim.keymap.editor
+local config = require("config")
+local ex = config.keymap.explore
+local editor = config.keymap.editor
 
 map.nmap(ex.open_explore, ":Ranger<CR>")
 

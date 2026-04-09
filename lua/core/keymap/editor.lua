@@ -1,5 +1,6 @@
 local map = require("core.keymap.map")
-local editor         = nvim.keymap.editor
+local config = require("config")
+local editor = config.keymap.editor
 local move_length    = 10
 
 -- Leader

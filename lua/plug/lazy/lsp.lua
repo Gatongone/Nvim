@@ -1,5 +1,6 @@
 local lsp_keymap       = require("core.keymap.lsp")
 local icon             = require("theme.icon")
+local ext              = require("util.ext")
 local on_client_attach = function(_, bufnr)
     local bmap = function(...)
         vim.api.nvim_buf_set_keymap(bufnr, ...)
@@ -37,7 +38,7 @@ end
 local function on_mason_ui_open()
     local win          = vim.api.nvim_get_current_win()
     local opts         = vim.api.nvim_win_get_config(win)
-    local default_opts = nvim.ext.win.get_win_config({ title = "LSP Configs" })
+    local default_opts = ext.win.get_win_config({ title = "LSP Configs" })
     opts.title         = default_opts.title
     opts.title_pos     = default_opts.title_pos
     opts.border        = default_opts.border
